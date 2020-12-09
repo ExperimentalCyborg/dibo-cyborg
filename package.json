@@ -1,0 +1,21 @@
+{
+  "name": "dibo",
+  "version": "1.0.0",
+  "description": "A Discord bot template using Discord.js",
+  "main": "index.js",
+  "keywords": [
+    "Discord",
+    "bot",
+    "template",
+    "easy",
+    "simple",
+    "extensible",
+    "boilerplate"
+  ],
+  "author": "ExperimentalCyborg (https://github.com/ExperimentalCyborg)",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "sqlite3": "^5.0.0"
+  }
+}
