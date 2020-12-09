@@ -5,7 +5,7 @@ module.exports = class {
         let memberId;
 
         // Try to interpret text as a member ID
-        if(text.match(/^(\d+)$/m) && text <= 9223372036854775807){
+        if(text.match(/^(\d+)$/m) && text <= Math.pow(2, 63)){
             return await guild.members.fetch(text);
         }
 
@@ -143,5 +143,9 @@ module.exports = class {
             return guild.channels.cache.get(channelId).toString();
         } catch (e) {
         }
+    }
+
+    static isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 }
