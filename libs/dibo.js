@@ -31,8 +31,7 @@ module.exports = {
     'privilege': {                // Enumeration of privilege levels for command execution by discord guild members
         'ADMIN': 'Administrator',
         'MOD': 'Moderator',
-        'USER': 'User',
-        'NOBODY': 'Nobody'
+        'USER': 'User'
     }
 };
 
