@@ -5,7 +5,7 @@ module.exports = class {
         let memberId;
 
         // Try to interpret text as a member ID
-        if(text.match(/^(\d+)$/m) && text <= 9223372036854775807){
+        if(text.match(/^(\d+)$/m) && text <= Math.pow(2, 63)){
             return await guild.members.fetch(text);
         }
 
@@ -143,5 +143,16 @@ module.exports = class {
             return guild.channels.cache.get(channelId).toString();
         } catch (e) {
         }
+    }
+
+    static isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    // Converts an amount of milliseconds to a HH:MM:SS string
+    static durationToText(milliseconds) {
+        let date = new Date(0);
+        date.setMilliseconds(milliseconds);
+        return date.toISOString().substr(11, 8);
     }
 }
