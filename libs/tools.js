@@ -153,6 +153,11 @@ module.exports = class {
     static durationToText(milliseconds) {
         let date = new Date(0);
         date.setMilliseconds(milliseconds);
-        return date.toISOString().substr(11, 8);
+        let timestr = date.toISOString().substr(11, 8);
+        let daystr = '';
+        if(milliseconds / 86400000){
+            daystr = `${Math.floor(milliseconds / 86400000)}d `;
+        }
+        return `${daystr}${timestr}`;
     }
 }
