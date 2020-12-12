@@ -87,13 +87,13 @@ function bulkDelete(channel, deletionHistory, startTime) { // ugly wrapper to av
             delete dibo.cyborg.purges[channel.guild.id];
         });
     } else {
-        dibo.log.info(`The purge of ${channel} was cancelled by request after ${timeToText(Date.now() - startTime)}`, undefined, channel.guild.id);
+        dibo.log.info(`The purge of ${channel} was cancelled by request after ${dibo.tools.durationToText(Date.now() - startTime)}`, undefined, channel.guild.id);
     }
 }
 
 function finishBulkDelete(channel, deletionHistory, startTime){
     delete dibo.cyborg.purges[channel.guild.id];
-    dibo.log.info(`Finished purging ${channel}. ${deletionHistory.length} messages were removed in ${timeToText(Date.now() - startTime)}.`,
+    dibo.log.info(`Finished purging ${channel}. ${deletionHistory.length} messages were removed in ${dibo.tools.durationToText(Date.now() - startTime)}.`,
         undefined, channel.guild.id);
 }
 
@@ -138,14 +138,4 @@ async function doBulkDelete(channel, deletionHistory = [], startTime, staleSince
     setTimeout(async () => {
         bulkDelete(channel, deletionHistory, startTime);
     }, waitTime);
-}
-
-function isNumeric(n) { // todo move to dibo.tools
-    return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-function timeToText(milliseconds) { // todo move to dibo.tools
-    let date = new Date(0);
-    date.setMilliseconds(milliseconds);
-    return date.toISOString().substr(11, 8);
 }
