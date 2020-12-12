@@ -148,4 +148,11 @@ module.exports = class {
     static isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+
+    // Converts an amount of milliseconds to a HH:MM:SS string
+    static durationToText(milliseconds) {
+        let date = new Date(0);
+        date.setMilliseconds(milliseconds);
+        return date.toISOString().substr(11, 8);
+    }
 }
