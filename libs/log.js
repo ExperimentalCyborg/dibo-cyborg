@@ -47,7 +47,7 @@ module.exports = class {
             if (data === undefined) {
                 dataTxt = '';
             } else {
-                dataTxt = ` | ${data}`;
+                dataTxt = ` | ${data.toString()}`;
             }
 
             let guildIdTxt;
