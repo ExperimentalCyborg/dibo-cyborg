@@ -1,7 +1,7 @@
 const dibo = require('../libs/dibo');
 
 dibo.client.on('message', async msg => {
-    if (msg.partial || msg.author.system || msg.author.bot) {
+    if (msg.partial || msg.author.system || msg.author.bot || !msg['guild']) {
         return;
     }
 
