@@ -1,7 +1,7 @@
 {
   "debug": true,
   "prefix": "!",
-  "token": "Nzg2MTgyNzkxMDQ5NTEwOTQy.X9Crxw.2hXAqA-xVrmK3srWU969hSh74fA",
+  "token": "Put your bot token here. Make one on this page: https://discord.com/developers/applications",
   "databaseFilePath": "./database.sqlite3",
   "startupMessage": "",
   "presence": {
