@@ -2,7 +2,7 @@ const dibo = require('../libs/dibo');
 const Discord = require('discord.js');
 
 dibo.client.on('message', async msg => {
-    if (msg.partial || msg.author.system || msg.author.bot) {
+    if (msg.partial || msg.author.system || msg.author.bot || !msg.hasOwnProperty('guild')) {
         return;
     }
 
@@ -31,12 +31,12 @@ dibo.client.on('message', async msg => {
     let privilege;
     let perms = msg.member.permissions;
     let roles = msg.member.roles.cache.keyArray();
-    let modrole = await dibo.database.getGuildKey(msg.guild.id, 'modrole');
+    let modRole = await dibo.database.getGuildKey(msg.guild.id, 'modRole');
     if (perms.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
         privilege = dibo.privilege.ADMIN;
     } else {
         roles.forEach(role => {
-            if (role === modrole) {
+            if (role === modRole) {
                 privilege = dibo.privilege.MOD;
             }
         })

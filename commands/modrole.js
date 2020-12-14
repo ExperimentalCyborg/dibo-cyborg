@@ -1,7 +1,7 @@
 const dibo = require('../libs/dibo');
 
 module.exports = {
-    'names': ['modrole'],
+    'names': ['modRole'],
     'privilege': dibo.privilege.ADMIN,
     'summary': 'Manage the moderator role.',
     'help': 'Users with the moderator role are allowed to give me moderation commands. This can be any regular Discord server role. When this role is not defined, only server admins can use moderation commands.\n' +
@@ -16,11 +16,11 @@ module.exports = {
         '`%%pmodrole remove`',
     'func': async (priv, msg, args, action = '', roleText) => {
         action = action.toLowerCase();
-        let modRole = await dibo.database.getGuildKey(msg.guild.id, 'modrole');
+        let modRole = await dibo.database.getGuildKey(msg.guild.id, 'modRole');
         switch (action.toLowerCase()) {
             case 'remove':
                 modRole = '';
-                await dibo.database.setGuildKey(msg.guild.id, 'modrole', modRole);
+                await dibo.database.setGuildKey(msg.guild.id, 'modRole', modRole);
                 dibo.log.info(`${msg.author} removed the mod role.`, undefined, msg.guild.id)
                 return true;
             case 'set':
@@ -29,7 +29,7 @@ module.exports = {
                     return false;
                 } else {
                     modRole = role.id;
-                    await dibo.database.setGuildKey(msg.guild.id, 'modrole', modRole);
+                    await dibo.database.setGuildKey(msg.guild.id, 'modRole', modRole);
                     dibo.log.info(`${msg.member} set the mod role to \`${role.name}\`.`, undefined, msg.guild.id);
                     return true;
                 }
@@ -37,7 +37,7 @@ module.exports = {
                 msg.reply(`The current mod role is \`${findModRoleName(modRole, msg.guild)}\``);
                 break;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['modrole']);
+                return dibo.commandHandler.run(msg, priv, 'help', ['modRole']);
         }
     }
 }
