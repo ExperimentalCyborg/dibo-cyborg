@@ -149,7 +149,7 @@ module.exports = class {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    // Converts an amount of milliseconds to a HH:MM:SS string
+    // Converts an amount of milliseconds to a [DDd] HH:MM:SS string
     static durationToText(milliseconds) {
         let date = new Date(0);
         date.setMilliseconds(milliseconds);
