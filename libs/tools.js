@@ -155,8 +155,9 @@ module.exports = class {
         date.setMilliseconds(milliseconds);
         let timestr = date.toISOString().substr(11, 8);
         let daystr = '';
-        if(milliseconds / 86400000){
-            daystr = `${Math.floor(milliseconds / 86400000)}d `;
+        let days = Math.floor(milliseconds / 86400000);
+        if(days){
+            daystr = `${days}d `;
         }
         return `${daystr}${timestr}`;
     }
