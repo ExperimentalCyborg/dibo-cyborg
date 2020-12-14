@@ -70,7 +70,6 @@ function loadCommands() {
             if (settings.debug) {
                 throw reason;
             }
-            return;
         }
     });
 }
