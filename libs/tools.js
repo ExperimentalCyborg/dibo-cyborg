@@ -78,7 +78,7 @@ module.exports = class {
     // Accepts a message URL or message ID.
     static async textToMessage(guild, text = '') {
         let channelId, messageId;
-        let match = text.match(/^https:\/\/discord\.com\/channels\/(?<guild>\d+)\/(?<channel>\d+)\/(?<message>\d+)[\/]?$/);
+        let match = text.match(/^https:\/\/(?:\S+\.)?discord\.com\/channels\/(?<guild>\d+)\/(?<channel>\d+)\/(?<message>\d+)[\/]?$/);
         if (match && guild.id === match.groups.guild) { // Check for message URL (from the specified guild!)
             channelId = match.groups.channel;
             messageId = match.groups.message;
