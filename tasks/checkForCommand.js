@@ -2,7 +2,7 @@ const dibo = require('../libs/dibo');
 const Discord = require('discord.js');
 
 dibo.client.on('message', async msg => {
-    if (msg.partial || msg.author.system || msg.author.bot || !msg.hasOwnProperty('guild')) {
+    if (msg.partial || msg.author.system || msg.author.bot || !msg['guild']) {
         return;
     }
 
