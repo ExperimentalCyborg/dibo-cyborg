@@ -7,8 +7,9 @@ module.exports = {
     'summary': 'Display information on how to use a command.',
     'help': 'Use `%%phelp name_of_command` to see the help text for that command. For example, `%%phelp ping` will show you information about the `%%pping` command.\n' +
         'To see which commands are available to you, use `%%pcommands`.',
-    'func': async (priv, msg, args, topic) => {
+    'func': async (priv, msg, args, topic = '') => {
         let prefix = await dibo.getPrefix(msg.guild.id);
+        topic = topic.toLowerCase();
         if (!topic || !dibo.commandHandler.can_run(priv, topic)) {
             topic = 'help';
         }
