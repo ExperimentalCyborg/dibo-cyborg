@@ -1,7 +1,7 @@
 const dibo = require('../libs/dibo');
 
 module.exports = {
-    'names': ['modRole'],
+    'names': ['modrole'],
     'privilege': dibo.privilege.ADMIN,
     'summary': 'Manage the moderator role.',
     'help': 'Users with the moderator role are allowed to give me moderation commands. This can be any regular Discord server role. When this role is not defined, only server admins can use moderation commands.\n' +
@@ -37,7 +37,7 @@ module.exports = {
                 msg.reply(`The current mod role is \`${findModRoleName(modRole, msg.guild)}\``);
                 break;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['modRole']);
+                return dibo.commandHandler.run(msg, priv, 'help', ['modrole']);
         }
     }
 }

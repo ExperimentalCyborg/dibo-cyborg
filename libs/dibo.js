@@ -61,16 +61,15 @@ function loadCommands() {
         let cmd;
         try {
             cmd = require(`../commands/${fileName.slice(0, -3)}`);
-            commandsList.push(cmd.names[0]);
+            commandsList.push(cmd.names[0].toLowerCase());
             cmd.names.forEach(name => {
-                commands[name] = cmd;
+                commands[name.toLowerCase()] = cmd;
             });
         } catch (reason) {
             log.error('   Failed to load', reason);
             if (settings.debug) {
                 throw reason;
             }
-            return;
         }
     });
 }

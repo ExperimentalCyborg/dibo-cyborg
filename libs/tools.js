@@ -78,7 +78,7 @@ module.exports = class {
     // Accepts a message URL or message ID.
     static async textToMessage(guild, text = '') {
         let channelId, messageId;
-        let match = text.match(/^https:\/\/discord\.com\/channels\/(?<guild>\d+)\/(?<channel>\d+)\/(?<message>\d+)[\/]?$/);
+        let match = text.match(/^https:\/\/(?:\S+\.)?discord\.com\/channels\/(?<guild>\d+)\/(?<channel>\d+)\/(?<message>\d+)[\/]?$/);
         if (match && guild.id === match.groups.guild) { // Check for message URL (from the specified guild!)
             channelId = match.groups.channel;
             messageId = match.groups.message;
@@ -149,7 +149,7 @@ module.exports = class {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    // Converts an amount of milliseconds to a HH:MM:SS string
+    // Converts an amount of milliseconds to a [DDd] HH:MM:SS string
     static durationToText(milliseconds) {
         let date = new Date(0);
         date.setMilliseconds(milliseconds);
