@@ -1,7 +1,7 @@
 const dibo = require('../libs/dibo');
 
 module.exports = {
-    'names': ['activity', 'talktime', 'level', 'lvl'],
+    'names': ['activity', 'talktime', 'level', 'lvl', 'rank'],
     'privilege': dibo.privilege.USER,
     'summary': 'Displays how long you have been active in this server.',
     'help': 'Activity is calculated based on messages you have sent. Only whole minutes are counted. This means that two messages in one minute count as one minute, but two messages in five minutes count as two minutes.',
