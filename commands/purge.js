@@ -57,7 +57,7 @@ module.exports = {
                     'Bulk delete was unable to purge all remaining messages. I am now attempting to remove the rest one by one.', guildId);
                 break;
             case 'last': // todo functionally merge this with "all" and add an optional amount limit?
-                if(!isNumeric(amount)){
+                if(!dibo.tools.isNumeric(amount)){
                     return false;
                 }
                 amount = parseInt(amount) + 1;
