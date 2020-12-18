@@ -5,7 +5,7 @@ module.exports = {
     'names': ['record', 'history'],
     'privilege': dibo.privilege.MOD,
     'summary': "View a user's permanent record.",
-    'help': '',
+    'help': '`%%precord <user>`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
             return dibo.commandHandler.run(msg, priv, 'help', ['record']);
@@ -25,7 +25,7 @@ module.exports = {
         if(!record.length){
             body = '**CLEAN RECORD**';
         }else{
-            body = 'Time format is y/m/d h:m:s, timezone UTC.';
+            body = 'Time format is `y/m/d h:m:s`, timezone `UTC`.';
             record.forEach(entry => {
                 let time = new Date(entry.timestamp);
                 let durationText = '';
