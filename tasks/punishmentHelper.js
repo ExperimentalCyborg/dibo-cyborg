@@ -116,7 +116,7 @@ async function checkExpiredPunishments() {
 // Functions for moderation actions
 
 async function warn(author, member, reason = 'No reason specified') {
-    await addRecord(member.guild, member.id, TYPE_WARN, author.id, reason);
+    await addRecord(member.guild.id, member.id, TYPE_WARN, author.id, reason);
     // todo auto-punish on x warnings within y time should trigger here
     dibo.log.info(`${member} was warned by ${author}`, reason, member.guild.id);
     await member.send(`\`${member.guild}\` warns you: ${reason}\nToo many warnings can result in punishment.`).catch(()=>{});
