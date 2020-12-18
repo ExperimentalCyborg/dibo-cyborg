@@ -7,7 +7,7 @@ const Handler = require('./commandHandler');
 
 const database = new Database();
 const client = new Discord.Client({partials: ['MESSAGE', 'REACTION', 'USER']});
-const log = new Log(client.shard.ids[0]); // todo make log callback, use {'disableMentions': 'all'}
+const log = new Log(client.shard.ids[0]);
 
 let commands = {};
 let commandsList = [];
