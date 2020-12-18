@@ -26,8 +26,7 @@ safeDibo.cyborg.moderation.report = report;
 
 dibo.client.on('ready', () => {
     setInterval(async () => {
-        //await checkExpiredPunishments().catch(reason => dibo.log.error('Failed to check for expired punishments', reason));
-        await checkExpiredPunishments();
+        await checkExpiredPunishments().catch(reason => dibo.log.error('Failed to check for expired punishments', reason));
     }, punishmentReversionCheckInterval);
 })
 
