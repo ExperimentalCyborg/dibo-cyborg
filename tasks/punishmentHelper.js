@@ -248,7 +248,8 @@ async function unban(author, guildId, memberId, reason = 'No reason specified') 
 async function report(author, member, reason = 'No reason specified') {
     await author.send(`In \`${member.guild}\`, you reported ${member.user} for: ${reason}`);
     try {
-        await addRecord(member.guild.id, member.id, TYPE_REPORT, author.id, reason, undefined, true).catch(async reason1 => {
+        let recordReason = `${reason}\nReporter: ${author}`;
+        await addRecord(member.guild.id, member.id, TYPE_REPORT, author.id, recordReason, undefined, true).catch(async reason1 => {
             dibo.log.error(`Failed to store report from ${author} about ${member}, contents ${reason}`, reason1, member.guild.id);
             await author.send('Due to an internal error, i was unable to record this report in my database. I will try my best to alert server staff.');
         });
