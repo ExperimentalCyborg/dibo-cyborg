@@ -124,6 +124,10 @@ async function warn(author, member, reason = 'No reason specified') {
 
 // Mute someone. Duration is in minutes. If it's something other than an integer > 0, the punishment will be permanent.
 async function mute(author, member, reason = 'No reason specified', duration) {
+    if(author.id === member.id){
+        dibo.log.warn(`${author} tried to mute themselves.`, undefined, member.guild.id);
+        return false;
+    }
     let success = true;
     let errorText = `${author} failed to mute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
@@ -158,6 +162,10 @@ async function mute(author, member, reason = 'No reason specified', duration) {
 }
 
 async function unmute(author, member, reason = 'No reason specified') {
+    if(author.id === member.id){
+        dibo.log.warn(`${author} tried to unmute themselves.`, undefined, member.guild.id);
+        return false;
+    }
     let success = true;
     let errorText = `${author} failed to unmute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
@@ -183,6 +191,10 @@ async function unmute(author, member, reason = 'No reason specified') {
 
 // Ban someone. Duration is in minutes. If it's something other than an integer > 0, the punishment will be permanent.
 async function ban(author, member, duration, reason = 'No reason specified') {
+    if(author.id === member.id){
+        dibo.log.warn(`${author} tried to ban themselves.`, undefined, member.guild.id);
+        return false;
+    }
     let success = true;
     let errorText = `${author} failed to ban ${member} for "${reason}"`;
 
@@ -212,6 +224,9 @@ async function ban(author, member, duration, reason = 'No reason specified') {
 }
 
 async function unban(author, guildId, memberId, reason = 'No reason specified') {
+    if(author.id === member.id){
+        return false;
+    }
     let success = true;
     let errorText = `${author} failed to unban ${memberId} for "${reason}"`;
     let guild = await dibo.client.guilds.fetch(guildId);
