@@ -13,7 +13,7 @@ const TYPE_JOIN = 'joined';
 const TYPE_NOTE = 'noted';
 
 //const punishmentReversionCheckInterval = 60000;
-const punishmentReversionCheckInterval = 1000; // todo remove debug stuff
+const punishmentReversionCheckInterval = 10000; // todo remove debug stuff
 
 // Make the punishment helper functions available in the dibo object
 let safeDibo = new bnf(dibo);
@@ -26,7 +26,8 @@ safeDibo.cyborg.moderation.report = report;
 
 dibo.client.on('ready', () => {
     setInterval(async () => {
-        await checkExpiredPunishments().catch(reason => dibo.log.error('Failed to check for expired punishments', reason));
+        //await checkExpiredPunishments().catch(reason => dibo.log.error('Failed to check for expired punishments', reason));
+        await checkExpiredPunishments();
     }, punishmentReversionCheckInterval);
 })
 
@@ -88,23 +89,25 @@ dibo.client.on('guildMemberUpdate', async (oldMember, newMember) => {
 });
 
 async function checkExpiredPunishments() {
+    let reasonText = 'Limited time punishment has expired';
     let guilds = await dibo.database.getGuildList();
-    for (let guild of guilds) {
+    for (let guildId of guilds) {
         let changed = false;
-        let bans = await dibo.database.getGuildKey(guild, 'tempBans', {});
+        let guild = await dibo.client.guilds.fetch(guildId);
+
+        let bans = await dibo.database.getGuildKey(guildId, 'tempBans', {});
         for (let memberId of Object.keys(bans)) {
             if (bans[memberId] <= Date.now()) {
-                let member = await dibo.tools.textToMember(dibo.client.guilds.fetch(guild), memberId);
-                await unban(dibo.client.user, member, 'Limited time punishment has expired');
+                await unban(dibo.client.user, guildId, memberId, reasonText);
             }
         }
 
         changed = false;
-        let mutes = await dibo.database.getGuildKey(guild, 'tempMutes', {});
+        let mutes = await dibo.database.getGuildKey(guildId, 'tempMutes', {});
         for (let memberId of Object.keys(mutes)) {
             if (mutes[memberId] <= Date.now()) {
-                let member = await dibo.tools.textToMember(dibo.client.guilds.fetch(guild), memberId);
-                await unmute(dibo.client.user, member, 'Limited time punishment has expired');
+                let member = await dibo.tools.textToMember(guild, memberId);
+                await unmute(dibo.client.user, member, reasonText);
             }
         }
     }
@@ -113,20 +116,16 @@ async function checkExpiredPunishments() {
 // Functions for moderation actions
 
 async function warn(author, member, reason = 'No reason specified') {
-    let record = await dibo.database.getUserKey(member.guild.id, member.id, 'record', []);
-    record.push({
-        'timestamp': Date.now(),
-        'type': TYPE_WARN,
-        'author': author.id,
-        'reason': reason
-    });
+    await addRecord(member.guild, member.id, TYPE_WARN, author.id, reason);
     // todo auto-punish on x warnings within y time should trigger here
-    await dibo.database.setUserKey(member.guild.id, member.id, 'record', record);
     dibo.log.info(`${member} was warned by ${author}`, reason, member.guild.id);
+    await member.send(`\`${member.guild}\` warns you: ${reason}\nToo many warnings can result in punishment.`).catch(()=>{});
+    return true;
 }
 
 // Mute someone. Duration is in minutes. If it's something other than an integer > 0, the punishment will be permanent.
 async function mute(author, member, reason = 'No reason specified', duration) {
+    let success = true;
     let errorText = `${author} failed to mute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
     if (!muteRole) {
@@ -146,17 +145,21 @@ async function mute(author, member, reason = 'No reason specified', duration) {
         if (durationText !== 'permanently') { // add to temp mutes list
             let mutes = await dibo.database.getGuildKey(member.guild.id, 'tempMutes', {});
             let endTime = Date.now() + duration * 60 * 1000; // store end date as a timestamp in milliseconds
-            if (!mutes[member.id] > endTime) { // if no longer temp mute exists
+            if (!(mutes[member.id] > endTime)) { // if no longer temp mute exists
                 mutes[member.id] = endTime;
                 await dibo.database.setGuildKey(member.guild.id, 'tempMutes', mutes);
             }
         }
+        await member.send(`You are muted in \`${member.guild}\` ${durationText}. Reason:\n> ${reason}`).catch(()=>{});
     }).catch(error => {
         dibo.log.error(errorText, error, member.guild.id);
+        success = false;
     });
+    return success;
 }
 
 async function unmute(author, member, reason = 'No reason specified') {
+    let success = true;
     let errorText = `${author} failed to unmute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
     if (!muteRole) {
@@ -171,17 +174,21 @@ async function unmute(author, member, reason = 'No reason specified') {
         let mutes = await dibo.database.getGuildKey(member.guild.id, 'tempMutes', {});
         delete mutes[member.id];
         await dibo.database.setGuildKey(member.guild.id, 'tempMutes', mutes);
+        await member.send(`You are unmuted in \`${member.guild}\`. Reason:\n> ${reason}`).catch(()=>{});
     }).catch(error => {
         dibo.log.error(errorText, error, member.guild.id);
+        success = false;
     });
+    return success;
 }
 
 // Ban someone. Duration is in minutes. If it's something other than an integer > 0, the punishment will be permanent.
-async function ban(author, member, reason = 'No reason specified', duration) {
+async function ban(author, member, duration, reason = 'No reason specified') {
+    let success = true;
     let errorText = `${author} failed to ban ${member} for "${reason}"`;
 
     let durationText = 'permanently'
-    if (duration && dibo.tools.isNumeric(duration)) {
+    if (duration && dibo.tools.isNumeric(duration) && duration > 0) {
         durationText = `for ${dibo.tools.durationToText(duration * 60 * 1000)}`;
     }
 
@@ -192,29 +199,36 @@ async function ban(author, member, reason = 'No reason specified', duration) {
         if (durationText !== 'permanently') { // add to temp ban list
             let bans = await dibo.database.getGuildKey(member.guild.id, 'tempBans', {});
             let endTime = Date.now() + duration * 60 * 1000; // store end date as a timestamp in milliseconds
-            if (!bans[member.id] > endTime) { // if no longer temp ban exists
+            if (!(bans[member.id] > endTime)) { // if no longer temp ban exists
                 bans[member.id] = endTime;
                 await dibo.database.setGuildKey(member.guild.id, 'tempBans', bans);
             }
         }
+        await member.send(`You are banned from \`${member.guild}\` ${durationText}. Reason:\n> ${reason}`).catch(()=>{});
     }).catch(error => {
         dibo.log.error(errorText, error, member.guild.id);
+        success = false;
     });
+    return success;
 }
 
-async function unban(author, member, reason = 'No reason specified') {
-    let errorText = `${author} failed to unban ${member} for "${reason}"`;
+async function unban(author, guildId, memberId, reason = 'No reason specified') {
+    let success = true;
+    let errorText = `${author} failed to unban ${memberId} for "${reason}"`;
+    let guild = await dibo.client.guilds.fetch(guildId);
 
-    await addRecord(member.guild.id, member.id, TYPE_UNBAN, author.id, reason);
-    await member.guild.members.unban(member).then(async ()=>{
-            dibo.log.info(`${author} unbanned ${member}`, reason, member.guild.id);
+    await addRecord(guildId, memberId, TYPE_UNBAN, author.id, reason);
+    await guild.members.unban(memberId).then(async ()=>{
+            dibo.log.info(`${author} unbanned ${memberId}`, reason, guildId);
             // remove temp ban record if it exists
-            let bans = await dibo.database.getGuildKey(member.guild.id, 'tempBans', {});
-            delete bans[member.id];
-            await dibo.database.setGuildKey(member.guild.id, 'tempBans', bans);
+            let bans = await dibo.database.getGuildKey(guildId, 'tempBans', {});
+            delete bans[memberId];
+            await dibo.database.setGuildKey(guildId, 'tempBans', bans);
     }).catch(reason1 => {
-        dibo.log.error(errorText, reason1, member.guild.id);
+        dibo.log.error(errorText, reason1, guildId);
+        success = false;
     });
+    return success;
 }
 
 async function report(author, member, reason = 'No reason specified') {
@@ -272,7 +286,7 @@ async function updateOrAddExternal(guildId, userId, type, add = false){
     }
 }
 
-// Add an action to a user's permanent record.
+// Add an action to a user's permanent record. Duration is in minutes.
 async function addRecord(guildId, memberId, type = TYPE_NOTE, authorId, reason, duration, verified = false) {
     let record = await dibo.database.getUserKey(guildId, memberId, 'record', []);
     record.push({
