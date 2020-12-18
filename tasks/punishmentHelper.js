@@ -129,7 +129,7 @@ async function mute(author, member, reason = 'No reason specified', duration) {
     let errorText = `${author} failed to mute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
     if (!muteRole) {
-        dibo.log.error(errorText, 'No mute role is configured', member.guild.id);
+        dibo.log.warn(errorText, 'No mute role is configured', member.guild.id);
         return false;
     }
 
@@ -163,7 +163,7 @@ async function unmute(author, member, reason = 'No reason specified') {
     let errorText = `${author} failed to unmute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
     if (!muteRole) {
-        dibo.log.error(errorText, 'No mute role is configured, i don\'t know which role to remove!', member.guild.id);
+        dibo.log.warn(errorText, 'No mute role is configured, i don\'t know which role to remove!', member.guild.id);
         return false;
     }
 

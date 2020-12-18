@@ -31,7 +31,7 @@ module.exports = {
                     success = true;
                     dibo.log.info(`${msg.author} gave role \`${role.name}\` to ${member}`, undefined, guildId);
                 }).catch(reason => {
-                    dibo.log.error(`${msg.author} failed to give role \`${role.name}\` to ${member}`, reason, guildId);
+                    dibo.log.warn(`${msg.author} failed to give role \`${role.name}\` to ${member}`, reason, guildId);
                 })
                 break;
             case 'remove':
@@ -39,7 +39,7 @@ module.exports = {
                     success = true;
                     dibo.log.info(`${msg.author} removed role \`${role.name}\` from ${member}`, undefined, guildId);
                 }).catch(reason => {
-                    dibo.log.error(`${msg.author} failed to remove role \`${role.name}\` from ${member}`, reason, guildId);
+                    dibo.log.warn(`${msg.author} failed to remove role \`${role.name}\` from ${member}`, reason, guildId);
                 });
                 break;
         }

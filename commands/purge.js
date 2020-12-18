@@ -21,7 +21,7 @@ module.exports = {
         }
 
         if (dibo.cyborg.purges.hasOwnProperty(guildId)) { // make sure we don't start concurrent purges
-            dibo.log.error(`Failed to purge ${msg.channel}`,
+            dibo.log.warn(`Failed to purge ${msg.channel}`,
                 `Already purging ${dibo.tools.textToChannel(msg.guild, dibo.cyborg.purges[guildId])}`, guildId);
             return false;
         }
@@ -126,7 +126,7 @@ async function doBulkDelete(channel, deletionHistory = [], startTime, staleSince
     let waitTime = 0;
     if (staleSince > 0 && Date.now() - staleSince >= 5 * 60 * 1000) { // If we've been getting stale info for 5 minutes
         delete dibo.cyborg.purges[channel.guild.id];
-        dibo.log.error(`Purge of ${channel} auto-aborted.`,
+        dibo.log.warn(`Purge of ${channel} auto-aborted.`,
             `We've been getting stale channel message caches for 5 minutes or longer. Try again later when Discord is less busy.`, channel.guild.id);
         return;
     } else if (staleSince > 0) {

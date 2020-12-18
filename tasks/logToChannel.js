@@ -5,7 +5,7 @@ dibo.log.logCallback = (async (level, guildId, message, data) => {
     try{
         await logToChannel(level, guildId, message, data);
     }catch (e) {
-        dibo.log.error(`Unhandled exception in ${__filename}`, e, guildId, true);
+        dibo.log.error(`Unhandled exception in ${__filename} for guild ${guildId}`, e, undefined, true);
         if(dibo.debugMode){
             throw e;
         }

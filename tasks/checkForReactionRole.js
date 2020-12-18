@@ -43,10 +43,10 @@ dibo.client.on('messageReactionAdd', async (reaction, usr) => {
             await reaction.message.guild.members.fetch(user.id).then(async member => { // Fetch the user because they might not be cached yet
                 await member.roles.add(reactRoles[msgId]['roles'][emoji]).then(()=>{
                     reaction.users.remove(user).catch(reason => {
-                        dibo.log.error('Failed to remove reaction after reaction role assignment', reason, guildId);
+                        dibo.log.debug('Failed to remove reaction after reaction role assignment', reason, guildId);
                     });
                 }).catch(reason => {
-                    dibo.log.error(`Failed to assign reaction role to ${user}`, reason, guildId);
+                    dibo.log.warn(`Failed to assign reaction role to ${user}`, reason, guildId);
                 });
             }).catch(reason => {
                 dibo.log.debug('Failed to fetch reaction user', reason, guildId);
