@@ -34,10 +34,10 @@ async function logToChannel(level, guildId, message, data){
                 mbed.addField('Data:', data.toString());
             }
             break;
-        case dibo.log.LVL_INFO:
-            mbed.setColor('WHITE');
+        case dibo.log.LVL_WARNING:
+            mbed.setColor('ORANGE');
             if(data){
-                mbed.addField('Extra info:', data.toString());
+                mbed.addField('Reason:', data.toString());
             }
             break;
         case dibo.log.LVL_ERROR:
@@ -46,10 +46,16 @@ async function logToChannel(level, guildId, message, data){
                 mbed.addField('Reason:', data.toString());
             }
             break;
+        default:
+            mbed.setColor('WHITE');
+            if(data){
+                mbed.addField('Extra info:', data.toString());
+            }
+            break;
     }
     mbed.setFooter(`${dibo.name} v${dibo.version} shard ${dibo.client.shard.ids[0] + 1}/${dibo.client.shard.count}`)
     mbed.setTimestamp();
     channel.send(mbed).catch(reason => {
-        dibo.log.error(`Failed to send message in log channel`, reason, guildId, true);
+        dibo.log.warn(`Failed to send message in log channel`, reason, guildId, true);
     });
 }
