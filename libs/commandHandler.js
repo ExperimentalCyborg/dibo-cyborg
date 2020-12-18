@@ -62,10 +62,10 @@ module.exports = class {
     }
 
     static feedback_good(message) {
-        message.react('✅').catch(reason => dibo.log.error(`Failed to react to command message ${dibo.tools.makeMsgLink(message)}`, reason, message.guild.id));
+        message.react('✅').catch(reason => dibo.log.debug(`Failed to react to command message ${dibo.tools.makeMsgLink(message)}`, reason, message.guild.id));
     }
 
     static feedback_bad(message) {
-        message.react('❌').catch(reason => dibo.log.error(`Failed to react to command message ${dibo.tools.makeMsgLink(message)}`, reason, message.guild.id));
+        message.react('❌').catch(reason => dibo.log.debug(`Failed to react to command message ${dibo.tools.makeMsgLink(message)}`, reason, message.guild.id));
     }
 }

@@ -1,6 +1,7 @@
 module.exports = class {
     // log levels
     LVL_ERROR = 'error';
+    LVL_WARNING = 'warning';
     LVL_INFO = 'info';
     LVL_DEBUG = 'debug';
 
@@ -18,6 +19,10 @@ module.exports = class {
         this.log(this.LVL_ERROR, problem, reason, guildId, consoleOnly);
     }
 
+    warn(problem, reason, guildId, consoleOnly) {
+        this.log(this.LVL_WARNING, problem, reason, guildId, consoleOnly);
+    }
+
     info(message, data, guildId, consoleOnly) {
         this.log(this.LVL_INFO, message, data, guildId, consoleOnly);
     }
@@ -32,14 +37,17 @@ module.exports = class {
         if(guildId === undefined || this.debugMode || consoleOnly){
             let levelTxt;
             switch (level){
-                case this.LVL_INFO:
-                    levelTxt = 'INFO';
+                case this.LVL_WARNING:
+                    levelTxt = `${this.style.yellow}WARNING${this.style.reset}`;
                     break
                 case this.LVL_ERROR:
                     levelTxt = `${this.style.red}ERROR${this.style.reset}`;
                     break
                 case this.LVL_DEBUG:
-                    levelTxt = `${this.style.yellow}DEBUG${this.style.reset}`;
+                    levelTxt = `${this.style.magenta}DEBUG${this.style.reset}`;
+                    break
+                default:
+                    levelTxt = 'INFO';
                     break
             }
 
