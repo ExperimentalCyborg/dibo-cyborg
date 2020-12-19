@@ -38,11 +38,11 @@ dibo.client.on('guildMemberRemove', async member => {
 });
 
 dibo.client.on('guildBanAdd', async (guild, user) => {
-    await updateOrAddExternal(guild.id, user.id, TYPE_BAN);
+    await updateOrAddExternal(guild.id, user.id, TYPE_BAN, true);
 });
 
 dibo.client.on('guildBanRemove', async (guild, user) => {
-    await updateOrAddExternal(guild.id, user.id, TYPE_UNBAN);
+    await updateOrAddExternal(guild.id, user.id, TYPE_UNBAN, true);
 
     // When someone is (manually) unbanned, remove their temp ban from the list.
     try {
