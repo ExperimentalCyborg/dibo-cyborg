@@ -290,7 +290,7 @@ async function updateOrAddExternal(guildId, userId, type, add = false){
     try{
         let record = await dibo.database.getUserKey(guildId, userId, 'record', []);
         let lastRecord = record[record.length - 1];
-        if(lastRecord['type'] === type && lastRecord['verified'] === false){ // verify the last action
+        if(lastRecord && lastRecord['type'] === type && lastRecord['verified'] === false){ // verify the last action
             lastRecord['verified'] = true;
             await dibo.database.setUserKey(guildId, userId, 'record', record);
         }else if(add){
