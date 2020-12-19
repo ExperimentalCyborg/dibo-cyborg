@@ -15,18 +15,16 @@ dibo.client.on('message', async msg => {
         return;
     }
 
+    let errorText = `Failed to save user active time data to database for ${msg.author}`;
     if (timestampToMinutes(lastMsgSent) < timestampToMinutes(msg.createdTimestamp)) {
         activeMinutes += 1;
+        await dibo.database.setUserKey(msg.guild.id, msg.member.id, 'activeMinutes', activeMinutes).
+            catch(reason => dibo.log.error(errorText, reason, msg.guild.id));
     }
     lastMsgSent = msg.createdTimestamp;
+    await dibo.database.setUserKey(msg.guild.id, msg.member.id, 'lastMsgSent', lastMsgSent).
+        catch(reason => dibo.log.error(errorText, reason, msg.guild.id));
 
-    try {
-        await dibo.database.setUserKey(msg.guild.id, msg.member.id, 'lastMsgSent', lastMsgSent);
-        await dibo.database.setUserKey(msg.guild.id, msg.member.id, 'activeMinutes', activeMinutes);
-    } catch (reason) {
-        dibo.log.error(`Failed to save user active time data to database for ${await dibo.tools.textToMember(msg.author.id)}`,
-            reason, msg.guild.id);
-    }
 });
 
 function timestampToMinutes(timestamp) {
