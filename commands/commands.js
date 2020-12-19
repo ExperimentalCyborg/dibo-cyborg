@@ -16,7 +16,7 @@ module.exports = {
                 mbed.addField(`${prefix}${command}`, summary, true);
             }
         });
-        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} | ${msg.author.id}`);
+        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} (${msg.author.tag})`);
         await msg.reply(mbed);
     }
 }
