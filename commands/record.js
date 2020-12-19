@@ -26,7 +26,9 @@ module.exports = {
             body = '**CLEAN RECORD**';
         }else{
             body = 'Time format is `y/m/d h:m:s`, timezone `UTC`.';
-            record.forEach(entry => {
+            let counter = 1;
+            let entry = record.pop();
+            while(entry && counter < 25){
                 let time = new Date(entry.timestamp);
                 let durationText = '';
                 if(entry.duration){
@@ -36,7 +38,13 @@ module.exports = {
 
                 let timeText = `${('0000' + time.getUTCFullYear()).substr(-4)}/${('00' + time.getUTCMonth()).substr(-2)}/${('00' + time.getUTCDate()).substr(-2)} ${('00' + time.getUTCHours()).substr(-2)}:${('00' + time.getUTCMinutes()).substr(-2)}:${('00' + time.getUTCSeconds()).substr(-2)}`;
                 mbed.addField(timeText, `__Action:__\t${entry.type}\n__Reason:__\t${entry.reason}${durationText}`);
-            })
+
+                counter += 1;
+                entry = record.pop();
+            }
+            if(counter >= 25){
+                body = body + `\n${record.length} older entries are omitted.`;
+            }
         }
         mbed.setDescription(body);
         msg.reply(mbed);
