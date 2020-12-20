@@ -18,7 +18,6 @@ function exit(){
 }
 
 process.on('SIGINT', exit);
-process.on('SIGKILL', exit);
 manager.on('shardCreate', shard => {
     log.info(`Launched shard ${shard.id}`);
 });

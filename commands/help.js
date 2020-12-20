@@ -30,7 +30,7 @@ module.exports = {
             });
             mbed.addField('Aliases:', aliases.join(', '));
         }
-        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} | ${msg.author.id}`);
+        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} (${msg.author.tag})`);
         await msg.reply(mbed);
     }
 }

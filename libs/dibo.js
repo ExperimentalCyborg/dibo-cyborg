@@ -129,7 +129,6 @@ async function start() {
 }
 
 process.on('SIGINT', exit);
-process.on('SIGKILL', exit);
 
 client.on('ready', () => {
     log.info(`Logged in as ${log.style.underline}${client.user.tag}`)
