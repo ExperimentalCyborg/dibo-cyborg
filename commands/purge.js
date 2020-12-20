@@ -3,15 +3,24 @@ const dibo = require('../libs/dibo');
 module.exports = {
     'names': ['purge', 'clean', 'nuke'],
     'privilege': dibo.privilege.MOD,
-    'summary': '🚧 Bulk delete messages, optionally with a filter.',
-    'help': 'todo',
+    'summary': 'Bulk delete messages, optionally with a filter.',
+    'help': 'Beware that deleting messages older than 14 days may take a very long time or fail completely due to the way Discord stores messages. You can only run one purge at a time.\n' +
+        '\n' +
+        '**Remove all messages in a channel:**\n' +
+        '`%%ppurge all`\n' +
+        '\n' +
+        '**Remove the last <n> messages:**\n' +
+        '`%%ppurge last <n>`\n' +
+        '\n' +
+        '**Stop a long running purge task:**\n' +
+        '`%%ppurge stop`\n',
     'func': async (priv, msg, args, action = '', amount, userText) => {
         await msg.react('🚧'); // todo
 
         let guildId = msg.guild.id;
         action = action.toLowerCase();
 
-        if (['stop', 'all', 'last', 'user', 'word', 'reactions'].indexOf(action) < 0) {
+        if (['stop', 'all', 'last'/*, 'user', 'word', 'reactions'*/].indexOf(action) < 0) {
             return dibo.commandHandler.run(msg, priv, 'help', ['purge']);
         }
 
@@ -68,14 +77,14 @@ module.exports = {
                 await msg.channel.bulkDelete(amount, true);
                 dibo.log.info(`${msg.author} removed the last ${amount} messages from ${msg.channel}.`, undefined, guildId);
                 break;
-            case 'user':
+            /*case 'user':
                 // purge user N user
                 break;
             case 'word':
                 // purge word N word word word ..
                 break;
             case 'reactions':
-                break;
+                break;*/
         }
     }
 }
