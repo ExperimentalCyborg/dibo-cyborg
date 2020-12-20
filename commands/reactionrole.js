@@ -50,7 +50,7 @@ module.exports = {
                     await dibo.tools.textToMessage(guild, target).then(async message => {
                         await message.react(emoji);
                         await addReactionRole(dibo.database, guild, message, role.id, emoji);
-                        dibo.log.info(`${msg.author} added reactionrole ${emoji} = \`${role.name}\` to ${dibo.tools.makeMsgLink(message)}`);
+                        dibo.log.info(`${msg.author} added reactionrole ${emoji} = \`${role.name}\` to ${dibo.tools.makeMsgLink(message)}`, undefined, guild.id);
                         success = true;
                     });
                 }
