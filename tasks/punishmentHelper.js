@@ -93,7 +93,14 @@ async function checkExpiredPunishments() {
     let guilds = await dibo.database.getGuildList();
     for (let guildId of guilds) {
         let changed = false;
-        let guild = await dibo.client.guilds.fetch(guildId);
+        try{
+            let guild = await dibo.client.guilds.fetch(guildId);
+        }catch (e){
+            if(dibo.debugMode){
+                dibo.log.debug("Expired punishment check tried to fetch guild we don't have access to", guildId);
+            }
+            continue;
+        }
 
         let bans = await dibo.database.getGuildKey(guildId, 'tempBans', {});
         for (let memberId of Object.keys(bans)) {
@@ -230,7 +237,12 @@ async function unban(author, guildId, memberId, reason = 'No reason specified') 
     }
     let success = true;
     let errorText = `${author} failed to unban ${memberId} for "${reason}"`;
-    let guild = await dibo.client.guilds.fetch(guildId);
+    try{
+        let guild = await dibo.client.guilds.fetch(guildId);
+    }catch (e){
+        dibo.log.warn(errorText, `I don't have access to this guild: ${guildId}`);
+        return;
+    }
 
     await addRecord(guildId, memberId, TYPE_UNBAN, author.id, reason);
     await guild.members.unban(memberId).then(async ()=>{
