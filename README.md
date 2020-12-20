@@ -6,7 +6,7 @@ Cyborg is a Discord moderation bot based on dibo, a discord bot template.
 
 [Join this bot's home](https://discord.gg/rdWKn6ABRb) | discord.gg/rdWKn6ABRb
 
-##Features:
+## Features:
 - !ban permanently or for a limited time
 - !mute permanently or for a limited time
 - !warn users
@@ -16,7 +16,7 @@ Cyborg is a Discord moderation bot based on dibo, a discord bot template.
 - !purge for deleting a number or all messages in a channel
 - Tracks active time per user
 
-##Upcoming features:
+## Upcoming features:
 - assign roles based on active time (a level system)
 - purge a specific user's messages, or messages containing a specific word
 - banned words
