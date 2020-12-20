@@ -23,6 +23,7 @@ safeDibo.cyborg.moderation.unban = unban;
 safeDibo.cyborg.moderation.mute = mute;
 safeDibo.cyborg.moderation.unmute = unmute;
 safeDibo.cyborg.moderation.report = report;
+safeDibo.cyborg.moderation.durationTextToMinutes = durationTextToMinutes;
 
 dibo.client.on('ready', () => {
     setInterval(async () => {
@@ -313,4 +314,22 @@ async function addRecord(guildId, memberId, type = TYPE_NOTE, authorId, reason, 
         'verified': verified //whether or not i have seen a corresponding event to confirm this action (like guildBanAdd/guildBanRemove)
     });
     await dibo.database.setUserKey(guildId, memberId, 'record', record);
+}
+
+function durationTextToMinutes(durationText){
+    durationText = durationText.toLowerCase();
+    let duration;
+    if(durationText.endsWith('h')){
+        durationText = durationText.slice(0, -1);
+        duration = parseInt(durationText) * 60;
+    }else if(durationText.endsWith('d')){
+        durationText = durationText.slice(0, -1);
+        duration = parseInt(durationText) * 60 * 24;
+    }else if(durationText.endsWith('m')){
+        durationText = durationText.slice(0, -1);
+        duration = parseInt(durationText)
+    }else{
+        duration = parseInt(durationText)
+    }
+    return duration;
 }

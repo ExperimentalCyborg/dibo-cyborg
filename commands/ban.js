@@ -24,21 +24,7 @@ module.exports = {
             return false;
         }
 
-        durationText = durationText.toLowerCase();
-        let duration;
-        if(durationText.endsWith('h')){
-            durationText = durationText.slice(0, -1);
-            duration = parseInt(durationText) * 60;
-        }else if(durationText.endsWith('d')){
-            durationText = durationText.slice(0, -1);
-            duration = parseInt(durationText) * 60 * 24;
-        }else if(durationText.endsWith('m')){
-            durationText = durationText.slice(0, -1);
-            duration = parseInt(durationText)
-        }else{
-            duration = parseInt(durationText)
-        }
-
+        let duration = dibo.cyborg.moderation.durationTextToMinutes(durationText);
         return await dibo.cyborg.moderation.ban(msg.author, user, duration, args.slice(2).join(' ') || undefined);
     }
 }
