@@ -15,6 +15,7 @@
   "author": "ExperimentalCyborg (https://github.com/ExperimentalCyborg)",
   "license": "GPL-3.0",
   "dependencies": {
+    "bonnefooi": "^1.0.1",
     "discord.js": "^12.5.1",
     "sqlite3": "^5.0.0"
   }
