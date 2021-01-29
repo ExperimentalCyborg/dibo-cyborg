@@ -161,4 +161,32 @@ module.exports = class {
         }
         return `${daystr}${timestr}`;
     }
+
+    //Returns a string in the format of YYYY/MM/DD hh:mm:ss
+    static timeToText(timestamp, timezone = 0){
+        let time = new Date(timestamp + (timezone * 3600000));
+        let year = this.textPad(time.getUTCFullYear(), 4);
+        let month = this.textPad((time.getUTCMonth() + 1), 2);
+        let date = this.textPad(time.getUTCDate(), 2);
+        let hour = this.textPad(time.getUTCHours(), 2);
+        let minute = this.textPad(time.getUTCMinutes(), 2);
+        let second = this.textPad(time.getUTCSeconds(),2);
+        return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
+    }
+
+    //Return a string of the specified 'length' by padding 'text' with 'character'.
+    //Return 'text' when its length is 'length' or longer.
+    static textPad(text, length, character = '0', append = false){
+        if(text.length >= length){
+            return text;
+        }
+        let padding = character.repeat(length);
+        let paddedText;
+        if(append){
+            paddedText = `${text}${padding}`.substr(length);
+        }else{
+            paddedText = `${padding}${text}`.substr(-length);
+        }
+        return paddedText;
+    }
 }
