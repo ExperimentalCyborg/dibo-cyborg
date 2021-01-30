@@ -63,6 +63,7 @@ module.exports = {
                 });
                 return success;
             case 'list':
+                await dibo.cyborg.fetchReactionRoleMessages(guild.id);
                 let reactionroles = await dibo.database.getGuildKey(guild.id, 'reactionRoles', {});
                 let msglink, empty = true, response = 'Current reaction roles:';
                 Object.keys(reactionroles).forEach(msgId => {
