@@ -3,6 +3,7 @@ const dibo = require('./../libs/dibo');
 module.exports = {
     'names': ['report'],
     'privilege': dibo.privilege.USER,
+    'bypassRestrictions': true, // Users can use this command even in blacklisted channels.
     'summary': 'Report a user to the staff.',
     'help': `Report someone like this:
 \`%%preport <user> text about why you reported this user\`
