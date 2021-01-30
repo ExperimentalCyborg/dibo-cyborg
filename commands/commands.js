@@ -11,7 +11,7 @@ module.exports = {
         let mbed = new Discord.MessageEmbed();
         mbed.setTitle(`Available commands`);
         dibo.commandsList.forEach(command => {
-            if (dibo.commandHandler.can_run(priv, command)) { // todo .filter?
+            if (dibo.commandHandler.canRun(priv, command)) { // todo .filter?
                 let summary = dibo.tools.getHelpText(dibo.commands, command, prefix)[0]  || 'No summary available.';
                 mbed.addField(`${prefix}${command}`, summary, true);
             }
