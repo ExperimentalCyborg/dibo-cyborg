@@ -10,7 +10,7 @@ module.exports = {
     'func': async (priv, msg, args, topic = '') => {
         let prefix = await dibo.getPrefix(msg.guild.id);
         topic = topic.toLowerCase();
-        if (!topic || !dibo.commandHandler.can_run(priv, topic)) {
+        if (!topic || !dibo.commandHandler.canRun(priv, topic)) {
             topic = 'help';
         }
 

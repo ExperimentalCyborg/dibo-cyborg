@@ -24,12 +24,12 @@ module.exports = class Database {
 
     // Gracefully exit
     exit() {
-        if(this.db){
+        if (this.db) {
             this.db.close();
         }
     }
 
-    async getGuildList(){
+    async getGuildList() {
         let result = [];
         let query = "SELECT DISTINCT `guildId` FROM `guildKeys`;";
         await all(this.db, query).then(async rows => {
@@ -42,7 +42,7 @@ module.exports = class Database {
         return result;
     }
 
-    async getUserList(guildId){
+    async getUserList(guildId) {
         let result = [];
         let query = "SELECT DISTINCT `userId` FROM `userKeys` WHERE `guildId` = ?;";
         await all(this.db, query, [guildId]).then(async rows => {
@@ -97,9 +97,14 @@ module.exports = class Database {
         await run(this.db, query, [userId, guildId, key, JSON.stringify(value)]);
     }
 
-    // todo function for clearing all keys for a certain guild
-
-    // todo function for clearing all keys for a certain user
+    async deleteGuild(guildId, cascadeUsers = false) {
+        let query = "DELETE FROM guildKeys WHERE `guildId`=?;";
+        await run(this.db, query, [guildId]);
+        if(cascadeUsers){
+            let query = "DELETE FROM userKeys WHERE `guildId`=?;";
+            await run(this.db, query, [guildId]);
+        }
+    }
 }
 
 //Run a query without data output

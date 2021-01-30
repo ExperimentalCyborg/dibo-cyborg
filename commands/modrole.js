@@ -15,7 +15,6 @@ module.exports = {
         '**Remove the moderator role:**\n' +
         '`%%pmodrole remove`',
     'func': async (priv, msg, args, action = '', roleText) => {
-        action = action.toLowerCase();
         let modRole = await dibo.database.getGuildKey(msg.guild.id, 'modRole');
         switch (action.toLowerCase()) {
             case 'remove':

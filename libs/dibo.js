@@ -24,7 +24,7 @@ module.exports = {
     'database': database,         // Instance of ./libs/database.js
     'tools': Tools,               // Instance of ./libs/tools.js
     'log': log,                   // Instance of ./libs/log.js
-    'commandHandler': Handler,    // Instance of ./libs/commandHandler.js
+    'commandHandler': undefined,  // Instance of ./libs/commandHandler.js
     'client': client,             // Discord.js Client object https://discord.js.org/#/docs/main/stable/class/Client
     'commands': commands,         // Dict of all command names and aliases with their corresponding command object
     'commandsList': commandsList, // List of all primary command names
@@ -36,7 +36,7 @@ module.exports = {
 };
 
 // Instantiate classes who need dibo here to avoid a circular reference.
-new Handler(module.exports); // This works because Handler is a singleton.
+module.exports.commandHandler = new Handler(module.exports);
 
 async function getPrefix(guildId){
     return await database.getGuildKey(guildId, 'prefix', module.exports.defaultPrefix);
