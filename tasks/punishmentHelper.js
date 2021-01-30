@@ -93,8 +93,9 @@ async function checkExpiredPunishments() {
     let guilds = await dibo.database.getGuildList();
     for (let guildId of guilds) {
         let changed = false;
+        let guild;
         try{
-            let guild = await dibo.client.guilds.fetch(guildId);
+            guild = await dibo.client.guilds.fetch(guildId);
         }catch (e){
             if(dibo.debugMode){
                 dibo.log.debug("Expired punishment check tried to fetch guild we don't have access to", guildId);
