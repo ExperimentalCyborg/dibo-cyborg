@@ -48,10 +48,16 @@ module.exports = {
                     return success;
                 } else { // It's not a channel, so let's assume it's a message
                     await dibo.tools.textToMessage(guild, target).then(async message => {
+                        if(!message){
+                            success = false;
+                            return;
+                        }
                         await message.react(emoji);
                         await addReactionRole(dibo.database, guild, message, role.id, emoji);
                         dibo.log.info(`${msg.author} added reactionrole ${emoji} = \`${role.name}\` to ${dibo.tools.makeMsgLink(message)}`, undefined, guild.id);
                         success = true;
+                    }).catch(reason => {
+                        success = false;
                     });
                 }
                 return success;
