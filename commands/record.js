@@ -29,14 +29,11 @@ module.exports = {
             let counter = 1;
             let entry = record.pop();
             while(entry && counter < 25){
-                let time = new Date(entry.timestamp);
+                let timeText = dibo.tools.timeToText(entry.timestamp)
                 let durationText = '';
                 if(entry.duration){
                     durationText = `\n__Duration:__\t${dibo.tools.durationToText(entry.duration * 60 * 1000)}`;
                 }
-                ('00' + time.getMonth()).substr(-2)
-
-                let timeText = `${('0000' + time.getUTCFullYear()).substr(-4)}/${('00' + time.getUTCMonth()).substr(-2)}/${('00' + time.getUTCDate()).substr(-2)} ${('00' + time.getUTCHours()).substr(-2)}:${('00' + time.getUTCMinutes()).substr(-2)}:${('00' + time.getUTCSeconds()).substr(-2)}`;
                 mbed.addField(timeText, `__Action:__\t${entry.type}\n__Reason:__\t${entry.reason}${durationText}`);
 
                 counter += 1;
@@ -47,6 +44,7 @@ module.exports = {
             }
         }
         mbed.setDescription(body);
+        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} (${msg.author.tag})`);
         msg.reply(mbed);
     }
 }
