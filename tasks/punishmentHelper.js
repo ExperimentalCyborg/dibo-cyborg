@@ -124,6 +124,11 @@ async function checkExpiredPunishments() {
 // Functions for moderation actions
 
 async function warn(author, member, reason = 'No reason specified') {
+    if(dibo.client.user.id === member.id){
+        dibo.log.warn(`${author} tried to warn me.`, undefined, member.guild.id);
+        return false;
+    }
+
     await addRecord(member.guild.id, member.id, TYPE_WARN, author.id, reason);
     // todo auto-punish on x warnings within y time should trigger here
     dibo.log.info(`${member} was warned by ${author}`, reason, member.guild.id);
@@ -137,6 +142,12 @@ async function mute(author, member, reason = 'No reason specified', duration) {
         dibo.log.warn(`${author} tried to mute themselves.`, undefined, member.guild.id);
         return false;
     }
+
+    if(dibo.client.user.id === member.id){
+        dibo.log.warn(`${author} tried to mute me.`, undefined, member.guild.id);
+        return false;
+    }
+
     let success = true;
     let errorText = `${author} failed to mute ${member} for "${reason}"`;
     let muteRole = await dibo.database.getGuildKey(member.guild.id, 'muteRole');
@@ -204,6 +215,12 @@ async function ban(author, member, duration, reason = 'No reason specified') {
         dibo.log.warn(`${author} tried to ban themselves.`, undefined, member.guild.id);
         return false;
     }
+
+    if(dibo.client.user.id === member.id){
+        dibo.log.warn(`${author} tried to ban me.`, undefined, member.guild.id);
+        return false;
+    }
+    
     let success = true;
     let errorText = `${author} failed to ban ${member} for "${reason}"`;
 
