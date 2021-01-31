@@ -67,7 +67,6 @@ function finishDelete(channel, deletionHistory, startTime){
 }
 
 function startSlowDelete(channel, deletionHistory, startTime, limit, filterFunc, staleSince = -1) { // ugly wrapper to avoid duplicating code
-    console.log('SLOW START');
     if (dibo.cyborg.purges.hasOwnProperty(channel.guild.id)) {
         doSlowDelete(channel, deletionHistory, startTime, limit, filterFunc, staleSince).catch(reason => {
             dibo.log.error(`Failed to purge channel ${channel}`, reason, channel.guild.id);
@@ -79,7 +78,6 @@ function startSlowDelete(channel, deletionHistory, startTime, limit, filterFunc,
 }
 
 async function doSlowDelete(channel, deletionHistory, startTime, limit, filterFunc, staleSince) {
-    console.log('SLOW DO');
     let cache = await channel.messages.fetch({limit: 20}, false, true);
     let empty = true;
     let now = Date.now();
@@ -87,7 +85,6 @@ async function doSlowDelete(channel, deletionHistory, startTime, limit, filterFu
         if(deletionHistory.length >= limit){
             return;
         }
-        console.log('SLOW MSG');
         empty = false;
         if (deletionHistory.indexOf(message.id) >= 0) {
             return;
@@ -108,8 +105,6 @@ async function doSlowDelete(channel, deletionHistory, startTime, limit, filterFu
         finishDelete(channel, deletionHistory, startTime);
         return;
     }
-
-    console.log('SLOW WAIT');
 
     let waitTime = 0;
     if (staleSince > 0 && Date.now() - staleSince >= 5 * 60 * 1000) { // If we've been getting stale info for 5 minutes
