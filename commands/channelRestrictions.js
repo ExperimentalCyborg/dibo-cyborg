@@ -35,7 +35,7 @@ module.exports = {
                     channelList.push(dibo.tools.textToChannel(msg.guild, channelId));
                 });
                 mbed.addField('Channels', channelList.join('\n') || 'No channels listed.');
-                mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} (${msg.author.tag})`);
+                mbed.setFooter(`Requested by ${dibo.tools.memberToText(msg.member)})`);
                 msg.reply(mbed);
                 break;
             case 'type':

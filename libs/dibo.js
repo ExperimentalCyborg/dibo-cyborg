@@ -11,14 +11,13 @@ const log = new Log(client.shard.ids[0]);
 
 let commands = {};
 let commandsList = [];
-let settings;
 
 module.exports = {
+    'settings': {},
     'name': undefined,            // Taken from ./package.json
     'version': undefined,         // Taken from ./package.json
     'description': undefined,     // Taken from ./package.json
     'author': undefined,          // Taken from ./package.json
-    'debugMode': undefined,       // Defined in ./settings.json, applied in loadSettings()
     'defaultPrefix': '',          // Defined in ./settings.json, applied in loadSettings()
     'getPrefix': getPrefix,       // Helper function implemented down below
     'database': database,         // Instance of ./libs/database.js
@@ -32,8 +31,10 @@ module.exports = {
         'ADMIN': 'Administrator',
         'MOD': 'Moderator',
         'USER': 'User'
-    }
+    },
+    'startTime': Date.now()
 };
+let settings = module.exports.settings;
 
 // Instantiate classes who need dibo here to avoid a circular reference.
 module.exports.commandHandler = new Handler(module.exports);
@@ -43,10 +44,9 @@ async function getPrefix(guildId){
 }
 
 function loadSettings() {
-    settings = JSON.parse(fs.readFileSync('./settings.json'));
-    module.exports.debugMode = settings.debug;
-    module.exports.defaultPrefix = settings.prefix;
-    log.debugMode = settings.debug;
+    module.exports.settings = JSON.parse(fs.readFileSync('./settings.json'));
+    module.exports.defaultPrefix = module.exports.settings.prefix;
+    log.debugMode = module.exports.settings.debug;
 
     let package_data = JSON.parse(fs.readFileSync('./package.json'));
     module.exports.name = package_data['name'] || 'unknown';
@@ -67,7 +67,7 @@ function loadCommands() {
             });
         } catch (reason) {
             log.error('   Failed to load', reason);
-            if (settings.debug) {
+            if (module.exports.settings.debug) {
                 throw reason;
             }
         }
@@ -81,7 +81,7 @@ function loadTasks() {
             require(`../tasks/${fileName.slice(0, -3)}`);
         } catch (reason) {
             log.error('   Failed to load', reason);
-            if (settings.debug) {
+            if (module.exports.settings.debug) {
                 throw reason;
             }
         }
@@ -107,7 +107,7 @@ async function start() {
     log.info('Starting shard');
 
     log.info('Loading database...');
-    await database.start(settings.databaseFilePath).
+    await database.start(module.exports.settings.databaseFilePath).
         then(() => log.info('Database loaded')).
     catch(reason => {
         log.error('Failed to load or create database', reason);
@@ -123,7 +123,7 @@ async function start() {
     log.info('Tasks loaded');
 
     log.info('Connecting to Discord...');
-    await client.login(settings.token).
+    await client.login(module.exports.settings.token).
         then(() => log.info('Connected to Discord')).
         catch(reason => log.error('Failed to connect to Discord', reason));
 }
@@ -132,7 +132,7 @@ process.on('SIGINT', exit);
 
 client.on('ready', () => {
     log.info(`Logged in as ${log.style.underline}${client.user.tag}`)
-    client.user.setPresence(settings.presence).catch(reason => log.error('Failed to set presence', reason));
+    client.user.setPresence(module.exports.settings.presence).catch(reason => log.error('Failed to set presence', reason));
 });
 
 loadSettings();

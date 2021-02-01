@@ -10,5 +10,11 @@
       "name": "over this server"
     },
     "status": "online"
-  }
+  },
+  "name":  "",
+  "description": "",
+  "version": "",
+  "author": "",
+  "inviteUrl": "",
+  "websiteUrl": ""
 }

@@ -16,7 +16,7 @@ module.exports = {
                 mbed.addField(`${prefix}${command}`, summary, true);
             }
         });
-        mbed.setFooter(`Requested by ${msg.member.nickname || msg.author.username} (${msg.author.tag})`);
+        mbed.setFooter(`Requested by ${dibo.tools.memberToText(msg.member)})`);
         await msg.reply(mbed);
     }
 }
