@@ -1,5 +1,9 @@
 module.exports = class {
 
+    static memberToText(member){
+        return `${member.nickname || member.user.username} (${member.user.tag})`;
+    }
+
     // Accepts a user ID, user mention, or discord user tag (name#1234). Beware this is an async function.
     static async textToMember(guild, text = '') {
         let memberId;
