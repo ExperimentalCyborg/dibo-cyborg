@@ -37,7 +37,7 @@ module.exports = class {
         }).catch(reason => {
             this.feedbackBad(message);
             this.dibo.log.error(`Command error: ${this.dibo.tools.makeMsgLink(message)}`, reason, message.guild.id);
-            if (this.dibo.debugMode) {
+            if (this.dibo.settings.debugMode) {
                 throw reason;
             }
         });
