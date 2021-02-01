@@ -5,18 +5,16 @@ let safeDibo = new bnf(dibo);
 safeDibo.cyborg.purges = {};
 safeDibo.cyborg.bulkDeleteMessages = startDelete;
 
-async function startDelete(author, channel, limit = 0, filterFunc = undefined){
+async function startDelete(channel, limit = 0, filterFunc) {
     let guildId = channel.guild.id;
 
     dibo.cyborg.purges[guildId] = channel.id; // set the "purging in progress" flag
-    let amount = limit || 'all';
-    dibo.log.info(`${author} started the purge of ${amount} messages in ${channel}.`, undefined, guildId);
+    let amount = (limit > 0) ? limit : 'all';
 
     let deletionHistory = [];
     let startTime = Date.now();
-    if(!filterFunc && limit < 0){
-        if(!await bulkDelete(channel, deletionHistory, startTime)){
-            console.log('a')
+    if (!filterFunc && limit <= 0) {
+        if (!await bulkDelete(channel, deletionHistory, startTime)) {
             startSlowDelete(channel, deletionHistory, startTime); // Delete anything that's left one by one.
             dibo.log.info(`Started background purge of ${channel}.`,
                 'Bulk delete was unable to purge all remaining messages. I am now attempting to remove the rest one by one. This may take a long time!', guildId);
@@ -24,16 +22,10 @@ async function startDelete(author, channel, limit = 0, filterFunc = undefined){
         return;
     }
 
-    if(!filterFunc){
-        filterFunc = msg => {
-            return true;
-        } // filter that matches everything
-    }
-
     startSlowDelete(channel, deletionHistory, startTime, limit, filterFunc);
 }
 
-async function bulkDelete(channel, deletionHistory, startTime){
+async function bulkDelete(channel, deletionHistory, startTime) {
     let failed = false;
     let cache = await channel.messages.fetch({limit: 20}, false, true);
     while (!failed && cache.keyArray().length !== 0) { // bulk delete as much as possible first
@@ -60,7 +52,7 @@ async function bulkDelete(channel, deletionHistory, startTime){
     return false;
 }
 
-function finishDelete(channel, deletionHistory, startTime){
+function finishDelete(channel, deletionHistory, startTime) {
     delete dibo.cyborg.purges[channel.guild.id];
     dibo.log.info(`Finished purging ${channel}. ${deletionHistory.length} messages were removed in ${dibo.tools.durationToText(Date.now() - startTime)}.`,
         undefined, channel.guild.id);
@@ -78,13 +70,19 @@ function startSlowDelete(channel, deletionHistory, startTime, limit, filterFunc,
 }
 
 async function doSlowDelete(channel, deletionHistory, startTime, limit, filterFunc, staleSince) {
-    let cache = await channel.messages.fetch({limit: 20}, false, true);
+    let cacheLimit = 20;
+    if (!filterFunc) {
+        filterFunc = () => true;
+        cacheLimit = 100;
+    }
+    let cache = await channel.messages.fetch({limit: cacheLimit}, false, true);
     let empty = true;
     let now = Date.now();
     cache.each(message => {
-        if(deletionHistory.length >= limit){
+        if ((limit > 0 && deletionHistory.length >= limit) || !filterFunc(message)) {
             return;
         }
+
         empty = false;
         if (deletionHistory.indexOf(message.id) >= 0) {
             return;
@@ -112,7 +110,7 @@ async function doSlowDelete(channel, deletionHistory, startTime, limit, filterFu
         dibo.log.warn(`Purge of ${channel} auto-aborted.`,
             `We've been getting stale channel message caches for 5 minutes or longer. Try again later when Discord is less busy.`, channel.guild.id);
         return;
-    } else{
+    } else {
         waitTime = 15000;
         dibo.log.debug(`During the purge of ${channel}, Discord only returned already deleted messages when we asked for more. Waiting ${Math.floor(waitTime / 1000)} seconds until resuming to let Discord catch up.`,
             undefined, channel.guild.id);

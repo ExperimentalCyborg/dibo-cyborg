@@ -9,22 +9,37 @@ module.exports = {
         '**Remove all messages in a channel:**\n' +
         '`%%ppurge all`\n' +
         '\n' +
-        '**Remove the last <n> messages:**\n' +
-        '`%%ppurge last <n>`\n' +
+        '**Remove the last few messages in a channel:**\n' +
+        '`%%ppurge <amount>`\n' +
+        '`%%ppurge last <amount>`\n' +
+        '\n' +
+        '**Remove a user\'s messages in a channel:**\n' +
+        '`%%ppurge user <user>`\n' +
+        '`%%ppurge user <user> <amount>`\n' +
+        '\n' +
+        '**Remove messages containing a specific word in a channel:**\n' +
+        '`%%ppurge word <badword>`\n' +
+        '`%%ppurge word <badword> <amount>`\n' +
         '\n' +
         '**Stop a long running purge task:**\n' +
         '`%%ppurge stop`\n',
-    'func': async (priv, msg, args, action = '', amount, userText) => {
+    'func': async (priv, msg, args, action = '', arg1, arg2) => {
         let guildId = msg.guild.id;
         action = action.toLowerCase();
 
-        if (['stop', 'all', 'last'/*, 'user', 'word', 'reactions'*/].indexOf(action) < 0) {
-            return dibo.commandHandler.run(msg, priv, 'help', ['purge']);
+        if (dibo.tools.isNumeric(action) && !arg1) { // support "!purge n" for quickly removing the last n messages
+            arg1 = action;
+            action = 'last';
         }
 
         if (action === 'stop') {
-            delete dibo.cyborg.purges[guildId]; // clear the purging flag so any async actions abort
+            delete dibo.cyborg.purges[guildId];
             return true;
+        }
+
+        // can't be a default switch due to preprocessing
+        if (['all', 'last', 'user', 'word'].indexOf(action) < 0) {
+            return dibo.commandHandler.run(msg, priv, 'help', ['purge']);
         }
 
         if (dibo.cyborg.purges.hasOwnProperty(guildId)) { // make sure we don't start concurrent purges
@@ -33,33 +48,61 @@ module.exports = {
             return false;
         }
 
-        let success = undefined; // true would attempt to react a checkmark, which we don't want since the msg is gone
+        let limit, amountText;
         switch (action) {
             case 'all':
-                await dibo.cyborg.bulkDeleteMessages(msg.author, msg.channel).catch(reason => {
-                    success = false;
-                });
-                return success;
+                dibo.log.info(`${msg.author} started the purge of all messages in ${msg.channel}.`, undefined, guildId);
+                await dibo.cyborg.bulkDeleteMessages(msg.channel);
+                break;
             case 'last':
-                if(!dibo.tools.isNumeric(amount)){
+                if (!dibo.tools.isNumeric(arg1)) {
                     return false;
                 }
-                amount = parseInt(amount) + 1;
-                if (amount > 100) {
-                    amount = 100;
+                arg1 = parseInt(arg1) + 1;
+                dibo.log.info(`${msg.author} started the purge of ${arg1 - 1} messages in ${msg.channel}.`, undefined, guildId);
+                await dibo.cyborg.bulkDeleteMessages(msg.channel, arg1);
+                break;
+            case 'user':
+                if (!arg1) {
+                    return false;
                 }
-                await dibo.cyborg.bulkDeleteMessages(msg.author, msg.channel, amount).catch(reason => {
-                    success = false;
-                });
-                return success;
-            /*case 'user':
-                // purge user N user
+                let user = await dibo.tools.textToMember(msg.guild, arg1);
+                if (!user) {
+                    return false;
+                }
+
+                limit = -1;
+                if (dibo.tools.isNumeric(arg2)) { // the first argument is a valid integer (interpret as amount)
+                    limit = parseInt(arg2) + 1;
+                }
+                amountText = (limit > 0) ? limit - 1 : 'all';
+                dibo.log.info(`${msg.author} started the purge of ${amountText} messages by ${user} in ${msg.channel}.`, undefined, guildId);
+                await dibo.cyborg.bulkDeleteMessages(msg.channel, limit, getUserFilter(user.id));
                 break;
             case 'word':
-                // purge word N word word word ..
+                if (!arg1) {
+                    console.log(arg1, args);
+                    return false;
+                }
+
+                limit = -1;
+                if (dibo.tools.isNumeric(arg2)) { // the first argument is a valid integer (interpret as amount)
+                    limit = parseInt(arg2) + 1;
+                }
+
+                amountText = (limit > 0) ? limit - 1 : 'all';
+                dibo.log.info(`${msg.author} started the purge of ${amountText} messages containing "${arg1}" in ${msg.channel}.`, undefined, guildId);
+                await dibo.cyborg.bulkDeleteMessages(msg.channel, limit, getWordFilter(arg1));
                 break;
-            case 'reactions':
-                break;*/
         }
     }
+}
+
+function getUserFilter(userId) {
+    return msg => msg.author.id === userId;
+}
+
+function getWordFilter(word) {
+    //todo remove nonprinting characters, do number and unicode substitutions, use regex. Maybe existing lib?
+    return msg => msg.content.toLowerCase().indexOf(word.toLowerCase()) >= 0; // dumb approach
 }
