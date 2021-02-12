@@ -200,4 +200,14 @@ module.exports = class {
         }
         return paddedText;
     }
+
+    //Do a naive attempt at recombining a list of command arguments into a string, including quotes.
+    static textRecombine(arr){
+        arr.forEach((value, index) => {
+            if(value.indexOf(' ') >= 0){
+                arr[index] = `"${value}"`;
+            }
+        });
+        return arr.join(' ');
+    }
 }
