@@ -4,7 +4,7 @@ module.exports = {
     'names': ['privilege', 'priv'],
     'privilege': dibo.privilege.USER,
     'summary': 'Check your (bot) privilege.',
-    'help': '`%%pprivilege [user]`',
+    'help': '`%%c [user]`',
     'func': async (priv, msg, args, user) => {
         if(user){
             let member = await dibo.tools.textToMember(msg.guild, user);

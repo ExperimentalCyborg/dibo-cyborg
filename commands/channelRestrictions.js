@@ -8,19 +8,19 @@ module.exports = {
     'help': 'This does not affect Moderators and Admins.\n' +
         '\n' +
         '**Display the current configuration:**\n' +
-        '`%%pchannelrestrictions list`\n' +
+        '`%%c list`\n' +
         '\n' +
         '**Set the restriction type:**\n' +
-        '`%%pchannelrestrictions type <blacklist|whitelist>`\n' +
+        '`%%c type <blacklist|whitelist>`\n' +
         '\n' +
         '**Add a channel to the list:**\n' +
-        '`%%pchannelrestrictions add <channel>`\n' +
+        '`%%c add <channel>`\n' +
         '\n' +
         '**Remove a channel from the list:**\n' +
-        '`%%pchannelrestrictions remove <channel>`\n' +
+        '`%%c remove <channel>`\n' +
         '\n' +
         '**Clear the list:**\n' +
-        '`%%pchannelrestrictions clear`\n' +
+        '`%%c clear`\n' +
         'Doing this in whitelist mode entirely disables commands for users until channels are added.',
     'func': async (priv, msg, args, action = '', value = '') => {
         let restrictions = await dibo.database.getGuildKey(msg.guild.id,
@@ -86,7 +86,7 @@ module.exports = {
                 await dibo.database.setGuildKey(msg.guild.id, 'channelRestrictions', restrictions);
                 return true;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['channelrestrictions']);
+                return dibo.commandHandler.run(msg, priv, 'help', ['cr']);
         }
     }
 }

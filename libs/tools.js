@@ -119,10 +119,13 @@ module.exports = class {
         if (!dibo_commands.hasOwnProperty(command)) {
             return [];
         }
-        return [
-            dibo_commands[command].summary.replace(/%%p/g, prefix),
-            dibo_commands[command].help.replace(/%%p/g, prefix)
-        ];
+
+        let summary = dibo_commands[command].summary.replace(/%%c/g, `${prefix}${command}`);
+        summary = summary.replace(/%%p/g, prefix)
+        let content = dibo_commands[command].help.replace(/%%c/g, `${prefix}${command}`);
+        content = content.replace(/%%p/g, prefix)
+
+        return [summary, content];
     }
 
     static splitCommandString(commandString) {

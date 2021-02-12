@@ -5,11 +5,11 @@ module.exports = {
     'privilege': dibo.privilege.ADMIN,
     'summary': 'Change the bot command prefix.',
     'help': '\n**Display the current prefix:**\n' +
-        '`%%pprefix get`\n\n' +
+        '`%%c get`\n\n' +
         '**Change the prefix:**\n' +
-        '`%%pprefix set <prefix>`\n\n' +
+        '`%%c set <prefix>`\n\n' +
         '**Reset the prefix to the default:**\n' +
-        '`%%pprefix reset`',
+        '`%%c reset`',
     'func': async (priv, msg, args, action = '', prefixText = '') => {
         action = action.toLowerCase();
         if (action !== 'get' && action !== 'set' && action !== 'reset') {
