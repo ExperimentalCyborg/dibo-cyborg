@@ -25,6 +25,7 @@ module.exports = {
     'func': async (priv, msg, args, action = '', value = '') => {
         let restrictions = await dibo.database.getGuildKey(msg.guild.id,
             'channelRestrictions', dibo.commandHandler.defaultChannelRestrictions);
+        let success;
         switch (action.toLowerCase()) {
             case 'list':
                 let mbed = new Discord.MessageEmbed();
@@ -52,6 +53,7 @@ module.exports = {
                 if (!value) {
                     return false;
                 }
+                success = true;
                 args.slice(1).forEach(channelText => {
                     let channel = dibo.tools.textToChannel(msg.guild, channelText);
                     if (channel) {
@@ -59,12 +61,13 @@ module.exports = {
                             restrictions['channels'].push(channel.id);
                         }
                     } else {
-                        return false;
+                        success = false;
                     }
                 });
                 await dibo.database.setGuildKey(msg.guild.id, 'channelRestrictions', restrictions);
-                return true;
+                return success;
             case 'remove':
+                success = true;
                 if (!value) {
                     return false;
                 }
@@ -76,11 +79,11 @@ module.exports = {
                             restrictions['channels'].splice(index, 1);
                         }
                     } else {
-                        return false;
+                        success = false;
                     }
                 });
                 await dibo.database.setGuildKey(msg.guild.id, 'channelRestrictions', restrictions);
-                return true;
+                return success;
             case 'clear':
                 restrictions['channels'] = [];
                 await dibo.database.setGuildKey(msg.guild.id, 'channelRestrictions', restrictions);
