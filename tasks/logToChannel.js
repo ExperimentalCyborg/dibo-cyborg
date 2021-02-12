@@ -30,25 +30,25 @@ async function logToChannel(level, guildId, message, data){
     switch (level){
         case dibo.log.LVL_DEBUG:
             mbed.setColor('AQUA');
-            if(data){
+            if(data !== undefined){
                 mbed.addField('Data:', data.toString());
             }
             break;
         case dibo.log.LVL_WARNING:
             mbed.setColor('ORANGE');
-            if(data){
+            if(data !== undefined){
                 mbed.addField('Reason:', data.toString());
             }
             break;
         case dibo.log.LVL_ERROR:
             mbed.setColor('RED');
-            if(data){
+            if(data !== undefined){
                 mbed.addField('Reason:', data.toString());
             }
             break;
         default:
             mbed.setColor('WHITE');
-            if(data){
+            if(data !== undefined){
                 mbed.addField('Extra info:', data.toString());
             }
             break;
