@@ -53,7 +53,7 @@ async function logToChannel(level, guildId, message, data){
             }
             break;
     }
-    mbed.setFooter(`${dibo.name} v${dibo.version} shard ${dibo.client.shard.ids[0] + 1}/${dibo.client.shard.count}`)
+    mbed.setFooter(`${dibo.settings.name || 'Dibo'} v${dibo.settings.version || '0.0'} shard ${dibo.client.shard.ids[0] + 1}/${dibo.client.shard.count}`)
     mbed.setTimestamp();
     channel.send(mbed).catch(reason => {
         dibo.log.warn(`Failed to send message in log channel`, reason, guildId, true);

@@ -14,10 +14,6 @@ let commandsList = [];
 
 module.exports = {
     'settings': {},
-    'name': undefined,            // Taken from ./package.json
-    'version': undefined,         // Taken from ./package.json
-    'description': undefined,     // Taken from ./package.json
-    'author': undefined,          // Taken from ./package.json
     'defaultPrefix': '',          // Defined in ./settings.json, applied in loadSettings()
     'getPrefix': getPrefix,       // Helper function implemented down below
     'database': database,         // Instance of ./libs/database.js
@@ -47,12 +43,6 @@ function loadSettings() {
     module.exports.settings = JSON.parse(fs.readFileSync('./settings.json'));
     module.exports.defaultPrefix = module.exports.settings.prefix;
     log.debugMode = module.exports.settings.debug;
-
-    let package_data = JSON.parse(fs.readFileSync('./package.json'));
-    module.exports.name = package_data['name'] || 'unknown';
-    module.exports.version = package_data['version'] || 'unknown';
-    module.exports.description = package_data['description'] || 'unknown';
-    module.exports.author = package_data['author'] || 'unknown';
 }
 
 function loadCommands() {
