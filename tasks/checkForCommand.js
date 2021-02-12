@@ -2,6 +2,12 @@ const dibo = require('../libs/dibo');
 const Discord = require('discord.js');
 
 async function checkPrivilege(member){
+    try{
+        await member.fetch(true);
+    }catch (e){
+        return 'Invalid member'
+    }
+
     let privilege;
     let perms = member.permissions;
     let roles = member.roles.cache.keyArray();
