@@ -4,14 +4,14 @@ module.exports = {
     'names': ['mute', 'silence'],
     'privilege': dibo.privilege.MOD,
     'summary': 'Mute a user, temporarily or permanently.',
-    'help': '`%%pmute <user> [duration] [reason]`\n\n' +
+    'help': '`%%c <user> [duration] [reason]`\n\n' +
         'Duration must be a whole number. Examples:\n' +
-        '`%%pmute baduser#1234 30 my reason here` will mute for 30 minutes.\n' +
-        '`%%pmute baduser#1234 2h my reason here` will mute for 2 hours.\n' +
-        '`%%pmute baduser#1234 14d my reason here` will mute for 14 days.\n' +
-        '`%%pmute baduser#1234 perm my reason here` will mute permanently.\n' +
+        '`%%c baduser#1234 30 my reason here` will mute for 30 minutes.\n' +
+        '`%%c baduser#1234 2h my reason here` will mute for 2 hours.\n' +
+        '`%%c baduser#1234 14d my reason here` will mute for 14 days.\n' +
+        '`%%c baduser#1234 perm my reason here` will mute permanently.\n' +
         '\nAny invalid duration is automatically a permanent mute. That means this also results in a permanent mute:\n' +
-        '`%%pmute baduser#1234 forever my reason here`',
+        '`%%c baduser#1234 forever my reason here`',
     'func': async (priv, msg, args, userText = '', durationText = '') => {
         if(!userText){
             return dibo.commandHandler.run(msg, priv, 'help', ['mute']);

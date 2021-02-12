@@ -4,7 +4,7 @@ module.exports = {
     'names': ['warn', 'warning'],
     'privilege': dibo.privilege.MOD,
     'summary': 'Warn a user, and add it to their record.',
-    'help': '`%%pwarn <user> <reason>`',
+    'help': '`%%c <user> <reason>`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
             return dibo.commandHandler.run(msg, priv, 'help', ['warn']);

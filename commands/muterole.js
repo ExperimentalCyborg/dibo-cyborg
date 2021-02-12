@@ -8,13 +8,13 @@ module.exports = {
         'This is a regular discord server role which needs to be manually configured by an admin.' +
         '\n' +
         '**Display the current mute role:**\n' +
-        '`%%pmuterole get`\n' +
+        '`%%c get`\n' +
         '\n' +
         '**Set the mute role:**\n' +
-        '`%%pmuterole set <role>`\n' +
+        '`%%c set <role>`\n' +
         '\n' +
         '**Remove the mute role:**\n' +
-        '`%%pmuterole remove`',
+        '`%%c remove`',
     'func': async (priv, msg, args, action = '', roleText) => {
         action = action.toLowerCase();
         let muteRole = await dibo.database.getGuildKey(msg.guild.id, 'muteRole');

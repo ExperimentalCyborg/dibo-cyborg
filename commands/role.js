@@ -5,9 +5,9 @@ module.exports = {
     'privilege': dibo.privilege.MOD,
     'summary': 'Add roles to or remove roles from users.',
     'help': '\n**Give someone a role:**\n' +
-        '`%%prole add <role> <user>`\n\n' +
+        '`%%c add <role> <user>`\n\n' +
         '**Remove a role from someone:**\n' +
-        '`%%prole remove <role> <user>`',
+        '`%%c remove <role> <user>`',
     'func': async (priv, msg, args, cmd = '', roleText, userText) => {
         cmd = cmd.toLowerCase();
         if (cmd !== 'add' && cmd !== 'remove') {

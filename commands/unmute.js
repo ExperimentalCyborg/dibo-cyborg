@@ -4,7 +4,7 @@ module.exports = {
     'names': ['unmute', 'unsilence'],
     'privilege': dibo.privilege.MOD,
     'summary': 'Undo a mute.',
-    'help': '`%%punmute <user> [reason]`',
+    'help': '`%%c <user> [reason]`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
             return dibo.commandHandler.run(msg, priv, 'help', ['unmute']);

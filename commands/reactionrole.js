@@ -7,14 +7,14 @@ module.exports = {
     'help': 'Reaction roles are special reaction emoji that grant anyone who clicks them a specified role.\n' +
         '\n' +
         '**Show a list of reaction roles:**\n' +
-        '`%%preactionrole list`\n' +
+        '`%%c list`\n' +
         '\n' +
         '**Add a new reaction role:**\n' +
-        '`%%preactionrole add <target> <emoji> <role> [message_text]`\n' +
+        '`%%c add <target> <emoji> <role> [message_text]`\n' +
         'If `target` is a channel rather than a message, a new message will be posted to that channel. If `message_text` is empty, a standard text will be used.\n' +
         '\n' +
         '**Remove a reaction role:**\n' +
-        '`%%preactionrole remove <message> [emoji]`\n' +
+        '`%%c remove <message> [emoji]`\n' +
         'If emoji is omitted, all reaction roles will be removed from that message.',
     'func': async (priv, msg, args, action = '', target = '', emoji, roleText = '', content = '') => { //todo
         let guild = msg.guild;

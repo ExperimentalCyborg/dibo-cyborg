@@ -8,13 +8,13 @@ module.exports = {
         'If both are disabled, reporters will receive a DM advising them to contact server staff.\n' +
         '\n' +
         '**Display the current reports channel**\n' +
-        '`%%preporting get`\n' +
+        '`%%c get`\n' +
         '\n' +
         '**Change which channel reports are sent to**\n' +
-        '`%%preporting set <channel>`\n' +
+        '`%%c set <channel>`\n' +
         '\n' +
         '**Send reports to the logging channel**\n' +
-        '`%%preporting unset`',
+        '`%%c unset`',
     'func': async (priv, msg, args, action = '', channelText) => {
         let reportChannel = await dibo.database.getGuildKey(msg.guild.id, 'reportChannel');
         switch (action.toLowerCase()) {

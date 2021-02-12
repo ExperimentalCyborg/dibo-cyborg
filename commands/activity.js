@@ -6,9 +6,9 @@ module.exports = {
     'summary': 'Displays how long you have been active in this server.',
     'help': 'Activity is calculated based on messages you have sent. Only whole minutes are counted. This means that two messages in one minute count as one minute, but two messages in five minutes count as two minutes.\n\n' +
         '**Request your own active time**\n' +
-        '`%%pactivity`\n\n' +
+        '`%%c`\n\n' +
         '**Request someone else\'s active time**\n' +
-        '`%%pactivity <user>`',
+        '`%%c [user]`',
     'func': async (priv, msg, args, user) => {
         let subject;
         if (user) {

@@ -7,22 +7,20 @@ module.exports = {
     'help': 'Beware that deleting messages older than 14 days may take a very long time or fail completely due to the way Discord stores messages. You can only run one purge at a time.\n' +
         '\n' +
         '**Remove all messages in a channel:**\n' +
-        '`%%ppurge all`\n' +
+        '`%%c all`\n' +
         '\n' +
         '**Remove the last few messages in a channel:**\n' +
-        '`%%ppurge <amount>`\n' +
-        '`%%ppurge last <amount>`\n' +
+        '`%%c <amount>`\n' +
+        '`%%c last <amount>`\n' +
         '\n' +
         '**Remove a user\'s messages in a channel:**\n' +
-        '`%%ppurge user <user>`\n' +
-        '`%%ppurge user <user> <amount>`\n' +
+        '`%%c user <user> [amount]`\n' +
         '\n' +
         '**Remove messages containing a specific word in a channel:**\n' +
-        '`%%ppurge word <badword>`\n' +
-        '`%%ppurge word <badword> <amount>`\n' +
+        '`%%c word <badword> [amount]`\n' +
         '\n' +
         '**Stop a long running purge task:**\n' +
-        '`%%ppurge stop`\n',
+        '`%%c stop`\n',
     'func': async (priv, msg, args, action = '', arg1, arg2) => {
         let guildId = msg.guild.id;
         action = action.toLowerCase();

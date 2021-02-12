@@ -6,7 +6,7 @@ module.exports = {
     'bypassRestrictions': true, // Users can use this command even in blacklisted channels.
     'summary': 'Report a user to the staff.',
     'help': `Report someone like this:
-\`%%preport <user> text about why you reported this user\`
+\`%%c <user> text about why you reported this user\`
 \`<user>\` can be a tag: \`usernametag#1234\`, an ID: \`12345678890\`, or a \`@mention\` (not recommended).
 
 For example: 

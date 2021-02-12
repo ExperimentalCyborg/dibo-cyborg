@@ -5,7 +5,7 @@ module.exports = {
     'names': ['record', 'history'],
     'privilege': dibo.privilege.MOD,
     'summary': "View a user's permanent record.",
-    'help': '`%%precord <user>`',
+    'help': '`%%c <user>`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
             return dibo.commandHandler.run(msg, priv, 'help', ['record']);
