@@ -5,7 +5,7 @@ module.exports = {
     'names': ['help'],
     'privilege': dibo.privilege.USER,
     'summary': 'Display information on how to use a command.',
-    'help': 'Use `%%phelp name_of_command` to see the help text for that command. For example, `%%phelp ping` will show you information about the `%%pping` command.\n' +
+    'help': 'Use `%%c name_of_command` to see the help text for that command. For example, `%%c ping` will show you information about the `%%pping` command.\n' +
         'To see which commands are available to you, use `%%pcommands`.',
     'func': async (priv, msg, args, topic = '') => {
         let prefix = await dibo.getPrefix(msg.guild.id);
@@ -25,7 +25,7 @@ module.exports = {
         mbed.setTitle(`Help for \`${prefix}${dibo.commands[topic].names[0]}\``);
         mbed.addField(summary, body);
         if(dibo.commands[topic].names.length > 1){
-            let aliases = dibo.commands[topic].names.slice(1).map(value => {
+            let aliases = dibo.commands[topic].names.map(value => {
                 return `\`${prefix}${value}\``;
             });
             mbed.addField('Aliases:', aliases.join(', '));

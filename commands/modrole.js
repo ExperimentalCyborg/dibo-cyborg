@@ -7,13 +7,13 @@ module.exports = {
     'help': 'Users with the moderator role are allowed to give me moderation commands. This can be any regular Discord server role. When this role is not defined, only server admins can use moderation commands.\n' +
         '\n' +
         '**Display the current moderator role:**\n' +
-        '`%%pmodrole get`\n' +
+        '`%%c get`\n' +
         '\n' +
         '**Set the moderator role:**\n' +
-        '`%%pmodrole set <role>`\n' +
+        '`%%c set <role>`\n' +
         '\n' +
         '**Remove the moderator role:**\n' +
-        '`%%pmodrole remove`',
+        '`%%c remove`',
     'func': async (priv, msg, args, action = '', roleText) => {
         let modRole = await dibo.database.getGuildKey(msg.guild.id, 'modRole');
         switch (action.toLowerCase()) {

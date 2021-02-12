@@ -7,13 +7,13 @@ module.exports = {
     'help': 'If enabled, i will keep you updated on my status, changes to settings, and any errors i encounter.\n' +
         '\n' +
         '**Display the current log channel**\n' +
-        '`%%plogging get`\n' +
+        '`%%c get`\n' +
         '\n' +
         '**Enable logging**\n' +
-        '`%%plogging enable <channel>`\n' +
+        '`%%c enable <channel>`\n' +
         '\n' +
         '**Disable logging**\n' +
-        '`%%plogging disable`',
+        '`%%c disable`',
     'func': async (priv, msg, args, action = '', channelText) => {
         let logChannel = await dibo.database.getGuildKey(msg.guild.id, 'logChannel');
         switch (action.toLowerCase()) {
