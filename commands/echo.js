@@ -8,7 +8,7 @@ module.exports = {
     'func': async (priv, msg, args) => {
         msg.delete().
             catch(reason => dibo.log.warn('Failed to delete echo command message', reason, msg.guild.id));
-        msg.channel.send(args.join(' ')).
+        msg.channel.send(dibo.tools.textRecombine(args)).
             catch(reason => dibo.log.warn('Failed to send echo message', reason, msg.guild.id));
     }
 }

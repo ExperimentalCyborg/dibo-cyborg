@@ -14,12 +14,13 @@ For example:
     'func': async (priv, msg, args, member) => {
         await msg.delete();
         member = await dibo.tools.textToMember(msg.guild, member);
-        if(!member){
+        if (!member) {
             let prefix = await dibo.getPrefix(msg.guild.id);
             let helptext = dibo.tools.getHelpText(dibo.commands, 'report', prefix)[1];
             msg.author.send(`Your report in \`${msg.guild}\` did not contain a valid user.\n\n ${helptext}`);
             return;
         }
-        await dibo.cyborg.moderation.report(msg.author, member, `${args.slice(1).join(' ')}\nIn channel: ${msg.channel}`);
+        await dibo.cyborg.moderation.report(msg.author,
+            member, `${dibo.tools.textRecombine(args.slice(1))}\nIn channel: ${msg.channel}`);
     }
 }
