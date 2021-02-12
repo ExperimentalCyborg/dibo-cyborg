@@ -24,6 +24,15 @@ module.exports = {
         if(!role){
             throw 'Invalid role identifier';
         }
+
+        if(await dibo.checkPrivilege(msg.member) === dibo.privilege.MOD){
+            let memberPriv = await dibo.checkPrivilege(member);
+            if(memberPriv !== dibo.privilege.USER){
+                dibo.log.warn(`${msg.member} tried to edit roles of ${memberPriv} ${member}.`, undefined, member.guild.id);
+                return false;
+            }
+        }
+
         await member.fetch();
         switch (cmd.toLowerCase()) {
             case 'add':
