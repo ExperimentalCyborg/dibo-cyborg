@@ -5,7 +5,7 @@ module.exports = class {
     }
 
     // Accepts a user ID, user mention, or discord user tag (name#1234). Beware this is an async function.
-    static async textToMember(guild, text = '') {
+    static async textToMember(guild, text = '', id_only = false) {
         let memberId;
 
         // Try to interpret text as a member ID
@@ -22,7 +22,11 @@ module.exports = class {
         }
 
         if (memberId) { // try to get a member from the id we found
-            return await guild.members.fetch(memberId);
+            if(id_only){
+                return memberId;
+            }else{
+                return await guild.members.fetch(memberId);
+            }
         }
         // todo also support nicknames
     }

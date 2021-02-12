@@ -210,6 +210,7 @@ async function unmute(author, member, reason = 'No reason specified') {
 }
 
 // Ban someone. Duration is in minutes. If it's something other than an integer > 0, the punishment will be permanent.
+// Author needs to be a member object!
 async function ban(author, member, duration, reason = 'No reason specified') {
     if(author.id === member.id){
         dibo.log.warn(`${author} tried to ban themselves.`, undefined, member.guild.id);
@@ -220,7 +221,15 @@ async function ban(author, member, duration, reason = 'No reason specified') {
         dibo.log.warn(`${author} tried to ban me.`, undefined, member.guild.id);
         return false;
     }
-    
+
+    if(await dibo.checkPrivilege(author) === dibo.privilege.MOD){
+        let memberPriv = await dibo.checkPrivilege(member);
+        if(memberPriv !== dibo.privilege.USER){
+            dibo.log.warn(`${author} tried to ban ${memberPriv} ${member}.`, undefined, member.guild.id);
+            return false;
+        }
+    }
+
     let success = true;
     let errorText = `${author} failed to ban ${member} for "${reason}"`;
 
@@ -250,13 +259,14 @@ async function ban(author, member, duration, reason = 'No reason specified') {
 }
 
 async function unban(author, guildId, memberId, reason = 'No reason specified') {
-    if(author.id === member.id){
+    if(author.id === memberId){
         return false;
     }
     let success = true;
+    let guild;
     let errorText = `${author} failed to unban ${memberId} for "${reason}"`;
     try{
-        let guild = await dibo.client.guilds.fetch(guildId);
+        guild = await dibo.client.guilds.fetch(guildId);
     }catch (e){
         dibo.log.warn(errorText, `I don't have access to this guild: ${guildId}`);
         return;

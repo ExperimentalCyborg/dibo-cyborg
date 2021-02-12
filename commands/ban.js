@@ -25,6 +25,6 @@ module.exports = {
         }
 
         let duration = dibo.cyborg.moderation.durationTextToMinutes(durationText);
-        return await dibo.cyborg.moderation.ban(msg.author, user, duration, args.slice(2).join(' ') || undefined);
+        return await dibo.cyborg.moderation.ban(msg.member, user, duration, args.slice(2).join(' ') || undefined);
     }
 }

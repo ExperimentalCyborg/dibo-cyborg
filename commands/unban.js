@@ -10,11 +10,11 @@ module.exports = {
             return dibo.commandHandler.run(msg, priv, 'help', ['unban']);
         }
 
-        let user = await dibo.tools.textToMember(msg.guild, userText);
-        if(!user){
+        let userId = await dibo.tools.textToMember(msg.guild, userText, true);
+        if(!userId){
             return false;
         }
 
-        return await dibo.cyborg.moderation.unban(msg.author, user, args.slice(1).join(' ') || undefined);
+        return await dibo.cyborg.moderation.unban(msg.author, msg.guild.id, userId, args.slice(1).join(' ') || undefined);
     }
 }
