@@ -33,17 +33,22 @@ async function logUpdate(oldMsg, newMsg) {
         oldContent = oldMsg.content;
     }catch (e){}
 
+    if(oldContent === newMsg.content){
+        return; // Most likely an embed was auto-generated or removed. Not log worthy.
+    }
+
     let editLogChannel = await dibo.database.getGuildKey(newMsg.guild.id, 'editLogChannel');
     if (!editLogChannel) {
         return;
     }
+
     let channel = dibo.tools.textToChannel(newMsg.guild, editLogChannel);
     let mbed = new Discord.MessageEmbed();
     mbed.setColor("DARK_ORANGE");
     mbed.setTitle('Message Edit');
     mbed.setDescription(newMsg.url);
-    if(oldContent === undefined || oldContent === null){
-        mbed.addField('Warning', 'Unable to fetch old message contents.', true);
+    if(!oldContent){
+        mbed.addField('Warning', 'Unable to fetch old message contents, or empty message.', true);
     }else{
         mbed.addField('Old', oldMsg.content, true);
     }
@@ -62,12 +67,22 @@ async function logDeletion(msg) {
     if (!editLogChannel) {
         return;
     }
+
     let channel = dibo.tools.textToChannel(msg.guild, editLogChannel);
     let mbed = new Discord.MessageEmbed();
     mbed.setColor("DARK_RED");
     mbed.setTitle('Message Deletion');
     mbed.setDescription(`${msg.channel}`);
-    mbed.addField('Content', msg.content, true);
+    if(msg.content){
+        mbed.addField('Text', msg.content, true);
+    }
+    if(msg.attachments.size){
+        let attachments = [];
+        for(const [k, v] of msg.attachments){
+            attachments.push(v.proxyURL);
+        }
+        mbed.addField('Files', attachments.join('\n'));
+    }
     mbed.setFooter(`${await getAuthorName(msg.guild, msg.member)}`);
     mbed.setTimestamp();
     await channel.send(mbed);
