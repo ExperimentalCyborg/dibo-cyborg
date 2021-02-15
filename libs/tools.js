@@ -134,6 +134,9 @@ module.exports = class {
 
     static splitCommandString(commandString) {
         let results = commandString.match(/[\"].+?[\"]|[\'].+?[\']|[^ ]+/sg); // Also recognizes quoted arguments with spaces in them!
+        if(!results){
+            return [];
+        }
         results.forEach((value, index) => {
             if (value.includes(' ')) { // If an argument has spaces it starts and ends with quotes
                 results[index] = value.slice(1, -1); // Strip off the quotes
