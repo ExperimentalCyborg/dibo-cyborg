@@ -1,0 +1,20 @@
+{
+  "debug": false,
+  "prefix": "!",
+  "token": "get your bot token from https://discord.com/developers/applications",
+  "databasefilepath": "./database.sqlite3",
+  "startupmessage": "",
+  "presence": {
+    "activity": {
+      "type": "WATCHING",
+      "name": "over this server"
+    },
+    "status": "online"
+  },
+  "name":  "DiBo",
+  "description": "A discord bot template based on Discord.js",
+  "version": "0.60",
+  "author": "<@!241268589095682049>",
+  "inviteUrl": "",
+  "websiteUrl": ""
+}

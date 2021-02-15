@@ -11,7 +11,7 @@ module.exports = {
         '`%%c list`\n' +
         '\n' +
         '**Set the restriction type:**\n' +
-        '`%%c type <blacklist|whitelist>`\n' +
+        '`%%c type <deny|allow>`\n' +
         '\n' +
         '**Add a channel to the list:**\n' +
         '`%%c add <channel>`\n' +
@@ -21,7 +21,7 @@ module.exports = {
         '\n' +
         '**Clear the list:**\n' +
         '`%%c clear`\n' +
-        'Doing this in whitelist mode entirely disables commands for users until channels are added.',
+        'Doing this in allow mode entirely disables commands for users until channels are added.',
     'func': async (priv, msg, args, action = '', value = '') => {
         let restrictions = await dibo.database.getGuildKey(msg.guild.id,
             'channelRestrictions', dibo.commandHandler.defaultChannelRestrictions);
@@ -40,10 +40,10 @@ module.exports = {
                 msg.reply(mbed);
                 break;
             case 'type':
-                if (value.toLowerCase() === 'blacklist') {
-                    restrictions['type'] = 'blacklist';
-                } else if (value.toLowerCase() === 'whitelist') {
-                    restrictions['type'] = 'whitelist';
+                if (value.toLowerCase() === 'deny') {
+                    restrictions['type'] = 'deny';
+                } else if (value.toLowerCase() === 'allow') {
+                    restrictions['type'] = 'allow';
                 } else {
                     return false;
                 }

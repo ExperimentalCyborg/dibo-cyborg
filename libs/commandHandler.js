@@ -2,7 +2,7 @@ module.exports = class {
     constructor(dibo) {
         this.dibo = dibo; // To avoid circular references at load time
         this.defaultChannelRestrictions = {
-            'type': 'blacklist',
+            'type': 'deny',
             'channels': []
         }
     }
@@ -83,14 +83,14 @@ module.exports = class {
 
         let restrictions = await this.dibo.database.getGuildKey(guildId, 'channelRestrictions', this.defaultChannelRestrictions);
 
-        if(restrictions['type'] === 'blacklist'){
-            return restrictions['channels'].indexOf(channelId) === -1; // not in blacklist is good
-        }else if(restrictions['type'] === 'whitelist'){
-            return restrictions['channels'].indexOf(channelId) !== -1; // not not in whitelist is good
+        if(restrictions['type'] === 'deny'){
+            return restrictions['channels'].indexOf(channelId) === -1; // not in deny list is good
+        }else if(restrictions['type'] === 'allow'){
+            return restrictions['channels'].indexOf(channelId) !== -1; // not not in allow list is good
         }
 
         this.dibo.log.error('checkChannelRestrictions encountered unexpected channel restriction type in guild',
-            [restrictions['type'], guildId]);
+            restrictions['type'], guildId);
         return true; // fallback
     }
 }
