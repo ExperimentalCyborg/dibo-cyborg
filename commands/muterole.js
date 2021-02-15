@@ -38,7 +38,8 @@ module.exports = {
                 msg.reply(`The current mute role is \`${findMuteRoleName(muteRole, msg.guild)}\``);
                 break;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['muterole']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['muterole']);
+                return false;
         }
     }
 }

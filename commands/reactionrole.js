@@ -87,7 +87,8 @@ module.exports = {
                 await msg.reply(response, {'disableMentions': 'all'});
                 break;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['reactionrole']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['reactionrole']);
+                return false;
         }
     }
 }

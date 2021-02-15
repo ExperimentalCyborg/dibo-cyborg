@@ -8,7 +8,8 @@ module.exports = {
     'help': '`%%c <user>`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
-            return dibo.commandHandler.run(msg, priv, 'help', ['record']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['record']);
+            return false;
         }
 
         let member = await dibo.tools.textToMember(msg.guild, userText);

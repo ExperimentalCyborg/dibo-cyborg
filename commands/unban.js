@@ -7,7 +7,8 @@ module.exports = {
     'help': '`%%c <user> [reason]`',
     'func': async (priv, msg, args, userText) => {
         if(!userText){
-            return dibo.commandHandler.run(msg, priv, 'help', ['unban']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['unban']);
+            return false;
         }
 
         let userId = await dibo.tools.textToMember(msg.guild, userText, true);

@@ -37,7 +37,8 @@ module.exports = {
 
         // can't be a default switch due to preprocessing
         if (['all', 'last', 'user', 'word'].indexOf(action) < 0) {
-            return dibo.commandHandler.run(msg, priv, 'help', ['purge']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['purge']);
+            return false;
         }
 
         if (dibo.cyborg.purges.hasOwnProperty(guildId)) { // make sure we don't start concurrent purges
@@ -54,6 +55,7 @@ module.exports = {
                 break;
             case 'last':
                 if (!dibo.tools.isNumeric(arg1)) {
+                    await dibo.commandHandler.run(msg, priv, 'help', ['purge']);
                     return false;
                 }
                 arg1 = parseInt(arg1) + 1;
@@ -62,6 +64,7 @@ module.exports = {
                 break;
             case 'user':
                 if (!arg1) {
+                    await dibo.commandHandler.run(msg, priv, 'help', ['purge']);
                     return false;
                 }
                 let user = await dibo.tools.textToMember(msg.guild, arg1);
@@ -79,7 +82,7 @@ module.exports = {
                 break;
             case 'word':
                 if (!arg1) {
-                    console.log(arg1, args);
+                    await dibo.commandHandler.run(msg, priv, 'help', ['purge']);
                     return false;
                 }
 

@@ -42,7 +42,8 @@ module.exports = {
                 await dibo.database.setGuildKey(msg.guild.id, 'editLogChannel', editLogChannel);
                 return true;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['editlogging']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['editlogging']);
+                return false;
         }
     }
 }

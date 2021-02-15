@@ -11,7 +11,8 @@ module.exports = {
     'func': async (priv, msg, args, cmd = '', roleText, userText) => {
         cmd = cmd.toLowerCase();
         if (cmd !== 'add' && cmd !== 'remove') {
-            return dibo.commandHandler.run(msg, priv, 'help', ['role']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['role']);
+            return false;
         }
 
         let success = false;

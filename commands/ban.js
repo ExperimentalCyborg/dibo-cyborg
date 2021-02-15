@@ -16,7 +16,8 @@ module.exports = {
         //msg.delete(); //todo ninja mode
 
         if(!userText){
-            return dibo.commandHandler.run(msg, priv, 'help', ['ban']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['ban']);
+            return false;
         }
 
         let user = await dibo.tools.textToMember(msg.guild, userText);

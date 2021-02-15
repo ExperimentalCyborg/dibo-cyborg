@@ -46,7 +46,8 @@ module.exports = {
                 await dibo.database.setGuildKey(msg.guild.id, 'reportChannel', reportChannel);
                 return true;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['reporting']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['reporting']);
+                return false;
         }
     }
 }
