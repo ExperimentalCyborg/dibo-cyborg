@@ -50,6 +50,7 @@ module.exports = {
                 return true;
             case 'add':
                 if (!value) {
+                    await dibo.commandHandler.run(msg, priv, 'help', ['cr']);
                     return false;
                 }
                 args.slice(1).forEach(channelText => {
@@ -66,6 +67,7 @@ module.exports = {
                 return true;
             case 'remove':
                 if (!value) {
+                    await dibo.commandHandler.run(msg, priv, 'help', ['cr']);
                     return false;
                 }
                 args.slice(1).forEach(channelText => {
