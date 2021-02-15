@@ -89,7 +89,8 @@ module.exports = {
                 await dibo.database.setGuildKey(msg.guild.id, 'channelRestrictions', restrictions);
                 return true;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['cr']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['cr']);
+                return false;
         }
     }
 }

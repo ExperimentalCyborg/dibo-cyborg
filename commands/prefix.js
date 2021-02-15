@@ -13,7 +13,8 @@ module.exports = {
     'func': async (priv, msg, args, action = '', prefixText = '') => {
         action = action.toLowerCase();
         if (action !== 'get' && action !== 'set' && action !== 'reset') {
-            return dibo.commandHandler.run(msg, priv, 'help', ['prefix']);
+            await dibo.commandHandler.run(msg, priv, 'help', ['prefix']);
+            return false;
         }
 
         switch (action){
