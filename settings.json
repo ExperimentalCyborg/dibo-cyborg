@@ -1,8 +1,8 @@
 {
   "debug": true,
   "prefix": "!",
-  "token": "",
-  "databaseFilePath": "./database.sqlite3",
+  "token": "get your bot token from https://discord.com/developers/applications",
+  "databasefilepath": "./database.sqlite3",
   "startupMessage": "\n ________      ___    ___ ________  ________  ________  ________      \n|\\   ____\\    |\\  \\  /  /|\\   __  \\|\\   __  \\|\\   __  \\|\\   ____\\     \n\\ \\  \\___|    \\ \\  \\/  / | \\  \\|\\ /\\ \\  \\|\\  \\ \\  \\|\\  \\ \\  \\___|     \n \\ \\  \\        \\ \\    / / \\ \\   __  \\ \\  \\\\\\  \\ \\   _  _\\ \\  \\  ___   \n  \\ \\  \\____    \\/  /  /   \\ \\  \\|\\  \\ \\  \\\\\\  \\ \\  \\\\  \\\\ \\  \\|\\  \\  \n   \\ \\_______\\__/  / /      \\ \\_______\\ \\_______\\ \\__\\\\ _\\\\ \\_______\\ \n    \\|_______|\\___/ /        \\|_______|\\|_______|\\|__|\\|__|\\|_______| \n             \\|___|/                  Discord bot",
   "presence": {
     "activity": {
@@ -13,7 +13,7 @@
   },
   "name":  "Cyborg",
   "description": "All you need and nothing more.",
-  "version": "0.5",
+  "version": "0.60",
   "author": "<@!241268589095682049>",
   "inviteUrl": "https://tinyurl.com/dibo-cyborg",
   "websiteUrl": "https://github.com/ExperimentalCyborg/dibo-cyborg"
