@@ -36,7 +36,8 @@ module.exports = {
                 msg.reply(`The current mod role is \`${findModRoleName(modRole, msg.guild)}\``);
                 break;
             default:
-                return dibo.commandHandler.run(msg, priv, 'help', ['modrole']);
+                await dibo.commandHandler.run(msg, priv, 'help', ['modrole']);
+                return false;
         }
     }
 }
