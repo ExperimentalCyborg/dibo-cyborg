@@ -97,7 +97,7 @@ async function start() {
     log.info('Starting shard');
 
     log.info('Loading database...');
-    await database.start(module.exports.settings.databaseFilePath).
+    await database.start(module.exports.settings.databasefilepath).
         then(() => log.info('Database loaded')).
     catch(reason => {
         log.error('Failed to load or create database', reason);
