@@ -63,9 +63,13 @@ module.exports = {
                 return success;
             case 'remove':
                 let message = await dibo.tools.textToMessage(guild, target);
+                if(!message){
+                    await dibo.commandHandler.run(msg, priv, 'help', ['reactionrole']);
+                    return false;
+                }
                 await removeReactionRole(dibo.database, msg.guild, message, emoji).then(() => {
                     success = true
-                    dibo.log.info(`${msg.author} removed reactionrole ${emoji} from ${dibo.tools.makeMsgLink(message)}`, undefined, guild.id);
+                    dibo.log.info(`${msg.author} removed reactionrole${emoji ? ' ' + emoji : 's'} from ${dibo.tools.makeMsgLink(message)}`, undefined, guild.id);
                 });
                 return success;
             case 'list':
