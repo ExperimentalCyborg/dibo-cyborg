@@ -1,59 +1,71 @@
 const dibo = require('../libs/dibo');
 
-dibo.client.on('messageReactionAdd', async (reaction, usr) => {
+async function processReaction(remove, reaction, usr){
     if (usr.system || usr.bot) {
-        return
+        return;
     }
 
-    let guildId;
+    let guild;
     try {
-        guildId = reaction.message.guild.id;
+        guild = reaction.message.guild;
     }catch{}
 
     if (reaction.partial) { // for reactions on messages we don't have in memory
         try {
             await reaction.fetch(); // load the missing message
         } catch (error) {
-            dibo.log.error('Failed to fetch message reaction', error, guildId);
+            dibo.log.error('Failed to fetch message reaction', error, guild.id);
             return;
         }
     }
 
-    if (usr.partial) { // for reactions on messages we don't have in memory
+    let reactRoles = await dibo.database.getGuildKey(guild.id, 'reactionRoles', {});
+    let msgId = reaction.message.id;
+    let emoji = reaction.emoji.toString();
+    let role;
+    try{
+        role = reactRoles[msgId]['roles'][emoji];
+        if(!role){
+            return;
+        }
+    }catch{return;}
+
+
+    if (usr.partial) { // for users we don't have in memory
         try {
             await reaction.users.fetch(); // load the missing user(s)
         } catch (error) {
-            dibo.log.error('Failed to fetch reaction user(s)', error, guildId);
+            dibo.log.error('Failed to fetch reaction user(s)', error, guild.id);
             return;
         }
     }
 
-    let msgId = reaction.message.id;
-    let emoji = reaction.emoji.toString();
-    let reactRoles = await dibo.database.getGuildKey(guildId, 'reactionRoles', {});
-
-    if (reactRoles.hasOwnProperty(msgId) && reactRoles[msgId]['roles'].hasOwnProperty(emoji)) {
-        let key_value, user, reactionUsers = reaction.users.cache; // All users who reacted to this message
-        for (key_value of reactionUsers) {
-            user = key_value[1]; // Grab just the value, we don't need the key
-            if(user.bot || !user.id){ // Ignore bots and partial users that don't have an ID
-                continue;
-            }
-
-            await reaction.message.guild.members.fetch(user.id).then(async member => { // Fetch the user because they might not be cached yet
-                await member.roles.add(reactRoles[msgId]['roles'][emoji]).then(()=>{
-                    reaction.users.remove(user).catch(reason => {
-                        dibo.log.debug('Failed to remove reaction after reaction role assignment', reason, guildId);
-                    });
-                }).catch(reason => {
-                    dibo.log.warn(`Failed to assign reaction role to ${user}`, reason, guildId);
-                });
-            }).catch(reason => {
-                dibo.log.debug('Failed to fetch reaction user', reason, guildId);
-                reaction.users.remove(user).catch(reason => {
-                    dibo.log.debug('Failed to remove user reaction after failure to fetch user', reason, guildId);
-                });
-            });
-        }
+    let member = await dibo.tools.textToMember(guild, usr.id).catch(reason => {
+        dibo.log.debug(`ReactionRole Failed to get member from user`, usr, guild.id);
+    });
+    if(!member){
+        return;
     }
+
+    if(remove){
+        await member.roles.remove(role).then(()=>{
+            dibo.log.debug(`${member} dropped reaction role ${role}`, undefined, guild.id);
+        }).catch(reason => {
+            dibo.log.warn(`Failed to remove reaction role ${role} from ${member}`, reason, guild.id);
+        });
+    }else{
+        await member.roles.add(role).then(()=>{
+            dibo.log.debug(`${member} grabbed reaction role ${role}`, undefined, guild.id);
+        }).catch(reason => {
+            dibo.log.warn(`Failed to assign reaction role ${role} to ${member}`, reason, guild.id);
+        });
+    }
+}
+
+dibo.client.on('messageReactionRemove', async (reaction, usr) => {
+    await processReaction(true, reaction, usr);
+});
+
+dibo.client.on('messageReactionAdd', async (reaction, usr) => {
+    await processReaction(false, reaction, usr);
 });
