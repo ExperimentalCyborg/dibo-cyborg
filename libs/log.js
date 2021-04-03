@@ -52,7 +52,7 @@ module.exports = class {
             }
 
             let dataTxt;
-            if (data === undefined) {
+            if (data === undefined || data === null) {
                 dataTxt = '';
             } else {
                 dataTxt = ` | ${data.toString()}`;

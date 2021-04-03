@@ -98,7 +98,7 @@ async function checkExpiredPunishments() {
             guild = await dibo.client.guilds.fetch(guildId);
         }catch (e){
             if(dibo.debugMode){
-                dibo.log.debug("Expired punishment check tried to fetch guild we don't have access to", guildId);
+                dibo.log.debug("Expired punishment check tried to fetch guild we don't have access to", undefined, guildId);
             }
             continue;
         }
