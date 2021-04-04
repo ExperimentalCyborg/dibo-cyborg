@@ -23,7 +23,7 @@ module.exports = {
         let role, minutes;
         switch (action) {
             case 'list':
-                await list();
+                await list(msg);
                 break;
             case 'add':
                 role = dibo.tools.textToRole(msg.guild, roleText);
