@@ -356,6 +356,8 @@ async function addRecord(guildId, memberId, type = TYPE_NOTE, authorId, reason, 
     await dibo.database.setUserKey(guildId, memberId, 'record', record);
 }
 
+// accepts an integer string ending in "d", "h", "m" or nothing.
+// returns an integer in minutes.
 function durationTextToMinutes(durationText){
     durationText = durationText.toLowerCase();
     let duration;
