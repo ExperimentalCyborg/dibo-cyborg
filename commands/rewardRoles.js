@@ -119,13 +119,13 @@ async function list(msg){
     let accumulation = await dibo.database.getGuildKey(msg.guild.id, 'rewardRolesAccumulate', false);
     let listText = "";
     for (role of roles) {
-        listText += `\n${dibo.tools.durationToText(role.minutes * 60 * 1000)} ➡️ ${dibo.tools.textToRole(msg.guild, role.role)}`
+        listText += `\n${dibo.tools.durationToText(role.minutes * 60 * 1000)} > ${dibo.tools.textToRole(msg.guild, role.role)}`
     }
 
     let mbed = new Discord.MessageEmbed();
     mbed.setTitle(`List of reward roles`);
     mbed.addField('Role stacking', accumulation ? 'Enabled' : 'Disabled');
-    mbed.addField('Roles', listText || 'No roles configured.');
+    mbed.addField('Roles', listText ? `**Active time > Role**${listText}` : 'No roles configured.');
     mbed.setFooter(`Requested by ${dibo.tools.memberToText(msg.member)})`);
     msg.reply(mbed);
 }
