@@ -15,9 +15,9 @@ Cyborg is a Discord moderation bot based on dibo, a discord bot template.
 - !reactionrole - reaction roles allow users to gain a preconfigured role by clicking an emoji
 - !purge for deleting a number or all messages in a channel
 - Tracks active time per user
+- Assign roles based on active time (a level system)
 
 ## Upcoming features:
-- assign roles based on active time (a level system)
 - purge a specific user's messages, or messages containing a specific word
 - banned words
 - automatically warn based on banned words
