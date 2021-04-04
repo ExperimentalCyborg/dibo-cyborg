@@ -10,12 +10,14 @@ module.exports = {
         let prefix = await dibo.getPrefix(msg.guild.id);
         let mbed = new Discord.MessageEmbed();
         mbed.setTitle(`Available commands`);
+        let commandListText = '';
         dibo.commandsList.forEach(command => {
             if (dibo.commandHandler.canRun(priv, command)) { // todo .filter?
                 let summary = dibo.tools.getHelpText(dibo.commands, command, prefix)[0]  || 'No summary available.';
-                mbed.addField(`${prefix}${command}`, summary, true);
+                commandListText += `**${prefix}${command}**\n${summary}\n\n`;
             }
         });
+        mbed.addField(`_`, commandListText);
         mbed.setFooter(`Requested by ${dibo.tools.memberToText(msg.member)})`);
         await msg.reply(mbed);
     }
