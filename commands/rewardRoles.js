@@ -14,7 +14,10 @@ module.exports = {
         '`%%c remove <role>`\n\n' +
         '**Enable or disable stacking**\n' +
         '`%%c stacking <enable|disable>`\n' +
-        'When this is disabled, every time a user earns a new reward role, they lose previously earned ones. When this is enabled, they get to keep previously earned roles.',
+        'When this is disabled, every time a user earns a new reward role, they lose previously earned ones. When this is enabled, they get to keep previously earned roles.\n\n' +
+        '**Update all user\'s reward roles**\n' +
+        '`%%c update`\n' +
+        'This command reapplies reward roles to **all users**. In large servers, this can take a very long time. Only use it after making drastic changes to the reward role list! When a user hits a new milestone their roles will automatically be updated, including previously earned roles.',
     'func': async (priv, msg, args, action = '', roleText = '', minutesText = '') => {
         action = action.toLowerCase();
         let role, minutes;
