@@ -1,7 +1,4 @@
 const dibo = require('../libs/dibo');
-const bnf = require('bonnefooi');
-const Discord = require('discord.js');
-
 
 module.exports = {
     'names': ['activityroles', 'rewardroles', 'ar'],
@@ -23,7 +20,7 @@ module.exports = {
         let role, minutes;
         switch (action) {
             case 'list':
-                await list(msg);
+                await dibo.cyborg.rewardroles.list(msg);
                 break;
             case 'add':
                 role = dibo.tools.textToRole(msg.guild, roleText);
@@ -39,7 +36,12 @@ module.exports = {
                 }
                 return await remove(msg.guild.id, role.id);
             case 'update': // todo command to update the roles of all users after making changes to level roles
-                return false;
+                await msg.react('🔄');
+                dibo.log.info(`${msg.member} started updating all known user's roles based on current reward role configuration.`, undefined, msg.guild.id);
+                await update(msg.guild);
+                dibo.log.info(`Finished updating user's reward roles.`, undefined, msg.guild.id);
+                await msg.reactions.removeAll();
+                return true;
             case 'stacking':
                 roleText = roleText.toLowerCase();
                 switch (roleText) {
@@ -73,7 +75,7 @@ module.exports = {
 async function add(guildId, minutes, roleId) {
     let roles = await dibo.database.getGuildKey(guildId, 'rewardRoles', []); //{ role: '1234567890', minutes: 60 }
     for (role of roles) {
-        if(role.role === roleId){
+        if (role.role === roleId) {
             return false;
         }
     }
@@ -96,9 +98,16 @@ async function remove(guildId, roleId) {
     return false;
 }
 
-async function update(guildId) {
-    let rewardRoles = await dibo.database.getGuildKey(guildId, 'rewardRoles', []);
-    // stuff
+async function update(guild) {
+    let roles = await dibo.database.getGuildKey(guild.id, 'rewardRoles', []);
+    let userId, users = await dibo.database.getUserList(guild.id);
+    let accumulation = await dibo.database.getGuildKey(guild.id, 'rewardRolesAccumulate', false);
+    for (userId of users) {
+        let member = await dibo.tools.textToMember(guild, userId);
+        if (member) {
+            await dibo.cyborg.rewardroles.doRoleAssignment(guild, member, roles, accumulation);
+        }
+    }
 }
 
 function sortRoles(roles) {
@@ -113,22 +122,3 @@ function sortRoles(roles) {
     });
     return roles;
 }
-
-async function list(msg){
-    let roles = await dibo.database.getGuildKey(msg.guild.id, 'rewardRoles', []);
-    let accumulation = await dibo.database.getGuildKey(msg.guild.id, 'rewardRolesAccumulate', false);
-    let listText = "";
-    for (role of roles) {
-        listText += `\n${dibo.tools.durationToText(role.minutes * 60 * 1000)} > ${dibo.tools.textToRole(msg.guild, role.role)}`
-    }
-
-    let mbed = new Discord.MessageEmbed();
-    mbed.setTitle(`List of reward roles`);
-    mbed.addField('Role stacking', accumulation ? 'Enabled' : 'Disabled');
-    mbed.addField('Roles', listText ? `**Active time > Role**${listText}` : 'No roles configured.');
-    mbed.setFooter(`Requested by ${dibo.tools.memberToText(msg.member)})`);
-    msg.reply(mbed);
-}
-
-let safeDibo = new bnf(dibo);
-safeDibo.cyborg.rewardroles.list = list;
