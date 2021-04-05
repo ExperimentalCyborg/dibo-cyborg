@@ -47,8 +47,6 @@ async function bulkDelete(channel, deletionHistory, startTime) {
         return true;
     }
 
-    console.log(deletionHistory);
-
     return false;
 }
 
