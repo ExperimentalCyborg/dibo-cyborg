@@ -106,10 +106,9 @@ async function update(guild) {
     let userId, users = await dibo.database.getUserList(guild.id);
     let accumulation = await dibo.database.getGuildKey(guild.id, 'rewardRolesAccumulate', false);
     for (userId of users) {
-        let member = await dibo.tools.textToMember(guild, userId);
-        if (member) {
+        await dibo.tools.textToMember(guild, userId).then(async member => {
             await dibo.cyborg.rewardroles.doRoleAssignment(guild, member, roles, accumulation);
-        }
+        }).catch(reason => {});
     }
 }
 
