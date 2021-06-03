@@ -40,7 +40,6 @@ module.exports = {
         let results = [];
         let sum = 0;
         for(let i = 0; i < dice; i++){
-            crypto.randomBytes(2);
             let n = crypto.randomInt(1, sides);
             results.push(n);
             sum += n;
