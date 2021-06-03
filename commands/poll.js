@@ -44,5 +44,6 @@ module.exports = {
         for(const emoji of reactions){
             await poll.react(emoji);
         }
+        msg.delete();
     }
 }
